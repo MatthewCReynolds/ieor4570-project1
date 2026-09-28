@@ -24,7 +24,8 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, system-ui, sans-serif; background: var(--bg); color: var(--ink); }
-  #layout { display: grid; grid-template-columns: 320px 1fr; height: 100vh; }
+  #layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); height: 100vh; }
+  #layout > * { min-width: 0; }
   aside { border-right: 1px solid var(--line); padding: 1.5rem 1.25rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.25rem; background: var(--panel); }
   .brand { display: flex; align-items: center; gap: .6rem; }
   .brand .logo { width: 38px; height: 38px; border-radius: 10px; background: var(--accent); display: grid; place-items: center; color: var(--accent-ink); font-weight: 800; }
@@ -60,13 +61,13 @@
   .welcome { max-width: 820px; background: var(--panel); border: 1px dashed var(--tool-line); border-radius: var(--radius); padding: 1.1rem 1.25rem; color: var(--ink-2); font-size: .92rem; line-height: 1.5; }
   .welcome strong { color: var(--ink); }
   /* Tool call cards */
-  .tool { max-width: 820px; background: var(--tool); border: 1px solid var(--tool-line); border-left: 4px solid var(--accent); border-radius: 10px; font-size: .82rem; overflow: hidden; }
+  .tool { max-width: 820px; min-width: 0; background: var(--tool); border: 1px solid var(--tool-line); border-left: 4px solid var(--accent); border-radius: 10px; font-size: .82rem; overflow: hidden; }
   .tool.error { border-left-color: var(--bad); }
-  .tool-head { display: flex; align-items: center; gap: .6rem; padding: .55rem .8rem; cursor: pointer; user-select: none; }
+  .tool-head { display: flex; align-items: center; gap: .6rem; padding: .55rem .8rem; cursor: pointer; user-select: none; min-width: 0; }
   .tool-head .badge { font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 700; }
   .tool.error .tool-head .badge { color: var(--bad); }
   .tool-head .name { font-family: ui-monospace, Menlo, monospace; font-weight: 600; color: var(--ink); }
-  .tool-head .args { color: var(--ink-2); font-family: ui-monospace, Menlo, monospace; font-size: .76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+  .tool-head .args { color: var(--ink-2); font-family: ui-monospace, Menlo, monospace; font-size: .76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
   .tool-head .chev { color: var(--ink-3); transition: transform .15s; }
   .tool.open .tool-head .chev { transform: rotate(90deg); }
   .tool-body { display: none; padding: .2rem .8rem .8rem; border-top: 1px solid var(--tool-line); }
@@ -85,7 +86,9 @@
   .links { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .6rem; }
   .links a { font-size: .76rem; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: .3rem .6rem; border-radius: 7px; }
   .links a:hover { background: var(--accent-soft); }
-  table.stops { border-collapse: collapse; width: 100%; font-size: .78rem; margin-top: .4rem; }
+  .table-wrap { overflow-x: auto; margin-top: .4rem; }
+  table.stops { border-collapse: collapse; width: 100%; font-size: .78rem; }
+  table.stops td:nth-child(3) { min-width: 9rem; }
   table.stops th, table.stops td { text-align: left; padding: .25rem .4rem; border-bottom: 1px solid var(--tool-line); }
   table.stops th { color: var(--ink-3); font-weight: 600; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
   .hours { display: flex; gap: .3rem; overflow-x: auto; padding-bottom: .3rem; }
@@ -100,7 +103,8 @@
   #send-btn { padding: .8rem 1.3rem; background: var(--accent); color: var(--accent-ink); border: none; border-radius: 12px; font-size: .9rem; font-weight: 600; cursor: pointer; }
   #send-btn:disabled { opacity: .4; cursor: default; }
   @media (max-width: 860px) {
-    #layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; min-height: 100vh; }
+    #layout { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto 1fr; height: auto; min-height: 100vh; }
+    body { overflow-x: hidden; }
     aside { border-right: none; border-bottom: 1px solid var(--line); }
     .tools, .foot { display: none; }
     main { min-height: 70vh; }
@@ -324,7 +328,7 @@
       const hours = (w && w.hours) || r.daylight_hours; if (hours && hours.length) box.appendChild(forecastStrip(hours));
     } else if (name === "find_refuel_stops") {
       box.appendChild(kpis(Object.entries(r.counts || {}).map(([k, v]) => [v, k]).concat([[r.total || 0, "total found"]])));
-      if (r.stops && r.stops.length) box.appendChild(stopsTable(r.stops)); else box.appendChild(el("div", null, r.note || "Nothing found."));
+      if (r.stops && r.stops.length) { const w = el("div", "table-wrap"); w.appendChild(stopsTable(r.stops)); box.appendChild(w); } else box.appendChild(el("div", null, r.note || "Nothing found."));
     } else if (name === "recommend_tire_pressure") {
       box.appendChild(kpis([[r.front_psi + " psi", `front (${r.front_bar} bar)`], [r.rear_psi + " psi", `rear (${r.rear_bar} bar)`], [r.inputs.tire_width_mm + " mm", r.inputs.surface + (r.inputs.tubeless ? ", tubeless" : "")]]));
       (r.notes || []).forEach(n => box.appendChild(el("div", null, "· " + n)));

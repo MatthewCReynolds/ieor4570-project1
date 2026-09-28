@@ -149,7 +149,8 @@ def chat(request: ChatRequest):
         response, tool_calls = run_agent(sessions[session_id])
     except Exception as e:
         # Auth, billing, a model that is not running: show it in the chat, not as a 500.
-        response, tool_calls = f"Model call failed: {type(e).__name__}: {str(e)[:300]}", []
+        first_line = str(e).strip().splitlines()[0] if str(e).strip() else ""
+        response, tool_calls = f"Model call failed: {type(e).__name__}: {first_line[:300]}", []
         sessions[session_id].pop()  # drop the user turn so the context is not left half-finished
 
     return ChatResponse(response=response, session_id=session_id, tool_calls=tool_calls)

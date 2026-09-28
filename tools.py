@@ -292,7 +292,7 @@ def get_ride_forecast(location: str | None = None, date: str | None = None, star
             return _error("start_hour must be an integer hour 0-23 in local time, e.g. 7 for 7 AM.")
         if not 0 <= s <= 23:
             return _error("start_hour must be between 0 and 23.")
-        window = rows[s:s + n_hours]
+        window = rows[s:s + n_hours + 1]        # start hour through the hour you finish
         avg = round(sum(r["ride_score"] for r in window) / len(window))
         end_h = s + duration_hours
         out["requested_window"] = {

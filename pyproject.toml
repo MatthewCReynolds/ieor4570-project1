@@ -1,0 +1,12 @@
+[project]
+name = "domestique"
+version = "1.0.0"
+description = "Domestique: a tool-calling cycling ride-planner agent (FastAPI + LiteLLM + Gemini on Vertex AI), deployed on Cloud Run"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.109.0",
+    "uvicorn>=0.27.0",
+    "litellm>=1.50",
+    "google-cloud-aiplatform>=1.40.0",
+    "requests>=2.31",
+]

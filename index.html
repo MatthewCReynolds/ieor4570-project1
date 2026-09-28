@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Domestique · cycling ride planner</title>
+<style>
+  :root {
+    --bg: #f6f4ee; --panel: #ffffff; --ink: #1c1b18; --ink-2: #5c5a52; --ink-3: #8f8c82;
+    --line: #e4e1d8; --accent: #e8590c; --accent-ink: #ffffff; --accent-soft: #fdebdd;
+    --tool: #f3f1ea; --tool-line: #d9d5c9; --ok: #2f7d4f; --warn: #b7791f; --bad: #b42318;
+    --chart-elev: #2a6f97; --chart-elev-fill: rgba(42,111,151,.15); --chart-head: #c2410c; --chart-tail: #0f766e; --chart-zero: #a8a49a;
+    --user: #1c1b18; --user-ink: #ffffff; --radius: 14px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15140f; --panel: #1f1e18; --ink: #ecebe4; --ink-2: #b4b1a6; --ink-3: #7d7a70;
+      --line: #2f2e27; --accent: #ff7a2f; --accent-soft: #3a2416; --tool: #262520; --tool-line: #3a3931;
+      --chart-elev: #6fb3d9; --chart-elev-fill: rgba(111,179,217,.18); --chart-head: #f28b5a; --chart-tail: #5fd3c4; --chart-zero: #5a584f;
+      --user: #ecebe4; --user-ink: #15140f; color-scheme: dark;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+  #layout { display: grid; grid-template-columns: 320px 1fr; height: 100vh; }
+  aside { border-right: 1px solid var(--line); padding: 1.5rem 1.25rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.25rem; background: var(--panel); }
+  .brand { display: flex; align-items: center; gap: .6rem; }
+  .brand .logo { width: 38px; height: 38px; border-radius: 10px; background: var(--accent); display: grid; place-items: center; color: var(--accent-ink); font-weight: 800; }
+  .brand h1 { font-size: 1.25rem; letter-spacing: -.01em; }
+  .brand small { display: block; color: var(--ink-2); font-size: .8rem; font-weight: 400; }
+  .tagline { color: var(--ink-2); font-size: .92rem; line-height: 1.45; }
+  aside h2 { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); margin-bottom: .5rem; }
+  .tools { list-style: none; display: flex; flex-direction: column; gap: .35rem; font-size: .84rem; color: var(--ink-2); }
+  .tools li { display: flex; gap: .5rem; align-items: baseline; }
+  .tools code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; color: var(--ink); background: var(--tool); padding: .05rem .35rem; border-radius: 5px; white-space: nowrap; }
+  .tools .orig { color: var(--accent); font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
+  .samples { display: flex; flex-direction: column; gap: .4rem; }
+  .sample { text-align: left; background: var(--bg); border: 1px solid var(--line); color: var(--ink); padding: .55rem .7rem; border-radius: 10px; font-size: .84rem; line-height: 1.35; cursor: pointer; }
+  .sample:hover { border-color: var(--accent); background: var(--accent-soft); }
+  .foot { margin-top: auto; font-size: .74rem; color: var(--ink-3); display: flex; flex-direction: column; gap: .5rem; }
+  .foot button { align-self: flex-start; background: transparent; border: 1px solid var(--line); color: var(--ink-2); padding: .4rem .7rem; border-radius: 8px; font-size: .78rem; cursor: pointer; }
+  .foot button:hover { border-color: var(--accent); color: var(--accent); }
+  main { display: flex; flex-direction: column; min-width: 0; }
+  #messages { flex: 1; overflow-y: auto; padding: 2rem clamp(1rem, 4vw, 3rem); display: flex; flex-direction: column; gap: 1.1rem; }
+  .msg { max-width: 820px; line-height: 1.55; font-size: .96rem; }
+  .msg .role { font-size: .68rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); margin-bottom: .3rem; }
+  .msg.user { align-self: flex-end; text-align: left; }
+  .msg.user .content { background: var(--user); color: var(--user-ink); padding: .7rem 1rem; border-radius: var(--radius) var(--radius) 4px var(--radius); display: inline-block; }
+  .msg.assistant .content { background: var(--panel); border: 1px solid var(--line); padding: .9rem 1.1rem; border-radius: 4px var(--radius) var(--radius) var(--radius); }
+  .msg.assistant .content p { margin: 0 0 .55rem; } .msg.assistant .content p:last-child { margin-bottom: 0; }
+  .msg.assistant .content ul, .msg.assistant .content ol { margin: .2rem 0 .6rem 1.2rem; }
+  .msg.assistant .content li { margin-bottom: .2rem; }
+  .msg.assistant .content h4 { font-size: .95rem; margin: .5rem 0 .3rem; }
+  .msg.assistant .content code { font-family: ui-monospace, Menlo, monospace; font-size: .85em; background: var(--tool); padding: .05rem .3rem; border-radius: 4px; }
+  .msg.loading .content { color: var(--ink-3); font-style: italic; }
+  .msg.loading .content::after { content: ""; display: inline-block; width: 1em; text-align: left; animation: dots 1.2s steps(4) infinite; }
+  @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
+  .welcome { max-width: 820px; background: var(--panel); border: 1px dashed var(--tool-line); border-radius: var(--radius); padding: 1.1rem 1.25rem; color: var(--ink-2); font-size: .92rem; line-height: 1.5; }
+  .welcome strong { color: var(--ink); }
+  /* Tool call cards */
+  .tool { max-width: 820px; background: var(--tool); border: 1px solid var(--tool-line); border-left: 4px solid var(--accent); border-radius: 10px; font-size: .82rem; overflow: hidden; }
+  .tool.error { border-left-color: var(--bad); }
+  .tool-head { display: flex; align-items: center; gap: .6rem; padding: .55rem .8rem; cursor: pointer; user-select: none; }
+  .tool-head .badge { font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 700; }
+  .tool.error .tool-head .badge { color: var(--bad); }
+  .tool-head .name { font-family: ui-monospace, Menlo, monospace; font-weight: 600; color: var(--ink); }
+  .tool-head .args { color: var(--ink-2); font-family: ui-monospace, Menlo, monospace; font-size: .76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+  .tool-head .chev { color: var(--ink-3); transition: transform .15s; }
+  .tool.open .tool-head .chev { transform: rotate(90deg); }
+  .tool-body { display: none; padding: .2rem .8rem .8rem; border-top: 1px solid var(--tool-line); }
+  .tool.open .tool-body { display: block; }
+  .tool-viz { padding: .6rem 0 .3rem; }
+  .tool pre { font-family: ui-monospace, Menlo, monospace; font-size: .74rem; color: var(--ink-2); white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow: auto; background: var(--panel); border: 1px solid var(--tool-line); border-radius: 8px; padding: .6rem; margin-top: .5rem; }
+  .tool details summary { cursor: pointer; color: var(--ink-3); font-size: .74rem; margin-top: .4rem; }
+  .kpis { display: flex; flex-wrap: wrap; gap: .6rem; }
+  .kpi { background: var(--panel); border: 1px solid var(--tool-line); border-radius: 8px; padding: .45rem .7rem; min-width: 96px; }
+  .kpi .v { font-size: 1.15rem; font-weight: 700; color: var(--ink); letter-spacing: -.01em; }
+  .kpi .l { font-size: .68rem; color: var(--ink-3); text-transform: uppercase; letter-spacing: .06em; }
+  .chart { position: relative; margin-top: .6rem; }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .chart .tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--bg); font-size: .72rem; padding: .25rem .45rem; border-radius: 6px; transform: translate(-50%, -120%); white-space: nowrap; display: none; }
+  .chart-title { font-size: .74rem; color: var(--ink-2); margin: .5rem 0 .2rem; }
+  .links { display: flex; gap: .5rem; flex-wrap: wrap; margin-top: .6rem; }
+  .links a { font-size: .76rem; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: .3rem .6rem; border-radius: 7px; }
+  .links a:hover { background: var(--accent-soft); }
+  table.stops { border-collapse: collapse; width: 100%; font-size: .78rem; margin-top: .4rem; }
+  table.stops th, table.stops td { text-align: left; padding: .25rem .4rem; border-bottom: 1px solid var(--tool-line); }
+  table.stops th { color: var(--ink-3); font-weight: 600; font-size: .68rem; text-transform: uppercase; letter-spacing: .06em; }
+  .hours { display: flex; gap: .3rem; overflow-x: auto; padding-bottom: .3rem; }
+  .hour { flex: 0 0 64px; background: var(--panel); border: 1px solid var(--tool-line); border-radius: 8px; padding: .35rem .3rem; text-align: center; font-size: .7rem; color: var(--ink-2); }
+  .hour .t { font-weight: 700; color: var(--ink); }
+  .hour .bar { height: 4px; border-radius: 2px; background: var(--line); margin: .3rem 0; overflow: hidden; }
+  .hour .bar i { display: block; height: 100%; background: var(--ok); }
+  .hour .arrow { display: inline-block; }
+  #input-area { display: flex; gap: .75rem; padding: 1rem clamp(1rem, 4vw, 3rem) 1.25rem; border-top: 1px solid var(--line); background: var(--panel); }
+  #user-input { flex: 1; padding: .8rem 1rem; border: 1px solid var(--line); border-radius: 12px; font-size: 1rem; outline: none; background: var(--bg); color: var(--ink); }
+  #user-input:focus { border-color: var(--accent); }
+  #send-btn { padding: .8rem 1.3rem; background: var(--accent); color: var(--accent-ink); border: none; border-radius: 12px; font-size: .9rem; font-weight: 600; cursor: pointer; }
+  #send-btn:disabled { opacity: .4; cursor: default; }
+  @media (max-width: 860px) {
+    #layout { grid-template-columns: 1fr; grid-template-rows: auto 1fr; height: auto; min-height: 100vh; }
+    aside { border-right: none; border-bottom: 1px solid var(--line); }
+    .tools, .foot { display: none; }
+    main { min-height: 70vh; }
+    .msg { max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div id="layout">
+  <aside>
+    <div class="brand">
+      <div class="logo">D</div>
+      <h1>Domestique <small>your AI ride-planning teammate</small></h1>
+    </div>
+    <p class="tagline">Tell it where you want to ride and when. It plans the route, reads the wind hour by hour, finds water and coffee on the way, sets your tire pressure, and tells you how long you'll be out.</p>
+    <div>
+      <h2>Try one</h2>
+      <div class="samples" id="samples"></div>
+    </div>
+    <div>
+      <h2>Tools it can call</h2>
+      <ul class="tools">
+        <li><code>plan_route</code> BRouter bike routing, climbing, surface mix</li>
+        <li><code>get_ride_forecast</code> hourly wind, rain, temps, daylight</li>
+        <li><code>analyze_headwind</code> wind vs. your direction, mile by mile <span class="orig">original</span></li>
+        <li><code>find_refuel_stops</code> water, shops, cafes along the route</li>
+        <li><code>recommend_tire_pressure</code> Berto 15%-drop model <span class="orig">original</span></li>
+        <li><code>estimate_ride_effort</code> physics: time, kJ, fueling</li>
+      </ul>
+    </div>
+    <div class="foot">
+      <span>Every tool call the agent makes is shown inline. Click one to open the result.</span>
+      <span id="session">New session</span>
+      <button id="new-btn" type="button">Start a new ride</button>
+    </div>
+  </aside>
+  <main>
+    <div id="messages">
+      <div class="welcome">
+        <strong>How to use it:</strong> ask like you'd text a riding buddy. Name a start and destination and it will route it.
+        Mention a day or time and it will pull that hour's wind. Give your weight, tires or watts and it will use them; otherwise it assumes a 165 lb rider at 150 W and says so.
+        It remembers the conversation, so follow-ups like "where can I refill on that route?" work.
+      </div>
+    </div>
+    <div id="input-area">
+      <input type="text" id="user-input" placeholder="Plan a road ride from Columbia University to Nyack, NY tomorrow at 8am" autocomplete="off" />
+      <button id="send-btn" type="button">Send</button>
+    </div>
+  </main>
+</div>
+<script>
+  const SAMPLES = [
+    "Is tomorrow morning good for a ride in Nyack, NY? Leaving at 8 for about 3 hours.",
+    "Plan a road ride from Columbia University, New York to Nyack, NY and tell me how long it takes at 170 W.",
+    "Which direction should I ride a loop from Boulder, CO via Lyons, CO on Saturday at 9am to avoid the headwind?",
+    "What tire pressure for a 170 lb rider on 32 mm tubeless tires for gravel?",
+    "Where can I refill water and grab coffee on that route?",
+  ];
+  const messages = document.getElementById("messages");
+  const userInput = document.getElementById("user-input");
+  const sendBtn = document.getElementById("send-btn");
+  const sessionLabel = document.getElementById("session");
+  let sessionId = null;
+
+  // ---------- helpers ----------
+  const el = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+  const esc = s => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  const fmt = (n, d = 0) => (n == null || isNaN(n)) ? "–" : Number(n).toFixed(d);
+
+  // Minimal markdown: bold, italics, code, headings, lists, paragraphs. Escapes HTML first.
+  function md(text) {
+    const inline = s => s.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/(^|[^*\w])\*([^*\n]+)\*/g, "$1<em>$2</em>").replace(/`([^`]+)`/g, "<code>$1</code>");
+    let html = "", ul = false, ol = false;
+    const close = () => { if (ul) { html += "</ul>"; ul = false; } if (ol) { html += "</ol>"; ol = false; } };
+    for (const raw of esc(text).split("\n")) {
+      const l = raw.trimEnd();
+      const mu = /^\s*[-*•]\s+(.*)/.exec(l), mo = /^\s*\d+[.)]\s+(.*)/.exec(l), mh = /^#{1,4}\s+(.*)/.exec(l);
+      if (mu) { if (ol) close(); if (!ul) { html += "<ul>"; ul = true; } html += "<li>" + inline(mu[1]) + "</li>"; continue; }
+      if (mo) { if (ul) close(); if (!ol) { html += "<ol>"; ol = true; } html += "<li>" + inline(mo[1]) + "</li>"; continue; }
+      close();
+      if (!l.trim()) continue;
+      html += mh ? "<h4>" + inline(mh[1]) + "</h4>" : "<p>" + inline(l) + "</p>";
+    }
+    close();
+    return html;
+  }
+
+  function addMessage(role, text, isLoading = false) {
+    const div = el("div", "msg " + (role === "you" ? "user" : "assistant") + (isLoading ? " loading" : ""));
+    div.appendChild(el("div", "role", role));
+    const content = el("div", "content");
+    if (role === "you") content.textContent = text; else content.innerHTML = md(text);
+    div.appendChild(content);
+    messages.appendChild(div);
+    messages.scrollTop = messages.scrollHeight;
+    return div;
+  }
+
+  // ---------- tool call cards ----------
+  function kpi(v, l) { const k = el("div", "kpi"); k.appendChild(el("div", "v", v)); k.appendChild(el("div", "l", l)); return k; }
+  function kpis(pairs) { const w = el("div", "kpis"); pairs.forEach(([v, l]) => w.appendChild(kpi(v, l))); return w; }
+
+  function chartFrame(title, w, h) {
+    const wrap = el("div", "chart");
+    if (title) wrap.appendChild(el("div", "chart-title", title));
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("viewBox", `0 0 ${w} ${h}`);
+    wrap.appendChild(svg);
+    const tip = el("div", "tip");
+    wrap.appendChild(tip);
+    return { wrap, svg, tip };
+  }
+  const svgEl = (name, attrs) => { const e = document.createElementNS("http://www.w3.org/2000/svg", name); for (const k in attrs) e.setAttribute(k, attrs[k]); return e; };
+  const ink = () => getComputedStyle(document.documentElement).getPropertyValue("--ink-3").trim();
+
+  // Single-series area chart: one hue, thin line, crosshair tooltip.
+  function elevationChart(profile) {
+    const pts = profile.map(([km, m]) => [km / 1.609344, m * 3.28084]);
+    const W = 640, H = 150, L = 44, R = 10, T = 10, B = 26;
+    const xMax = pts[pts.length - 1][0] || 1;
+    const ys = pts.map(p => p[1]); let yMin = Math.min(...ys), yMax = Math.max(...ys);
+    if (yMax - yMin < 100) { const mid = (yMax + yMin) / 2; yMin = mid - 50; yMax = mid + 50; }
+    const x = mi => L + (mi / xMax) * (W - L - R), y = ft => T + (1 - (ft - yMin) / (yMax - yMin)) * (H - T - B);
+    const { wrap, svg, tip } = chartFrame("Elevation profile (ft over miles)", W, H);
+    const line = pts.map((p, i) => (i ? "L" : "M") + x(p[0]).toFixed(1) + " " + y(p[1]).toFixed(1)).join(" ");
+    svg.appendChild(svgEl("path", { d: line + ` L${x(xMax)} ${H - B} L${L} ${H - B} Z`, fill: "var(--chart-elev-fill)", stroke: "none" }));
+    svg.appendChild(svgEl("path", { d: line, fill: "none", stroke: "var(--chart-elev)", "stroke-width": 2, "stroke-linejoin": "round" }));
+    [yMin, yMax].forEach(v => { const t = svgEl("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", "font-size": 11, fill: ink() }); t.textContent = Math.round(v); svg.appendChild(t); });
+    svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: H - B, y2: H - B, stroke: "var(--tool-line)" }));
+    const step = xMax > 60 ? 20 : xMax > 25 ? 10 : xMax > 10 ? 5 : 1;
+    for (let mi = 0; mi <= xMax; mi += step) { const t = svgEl("text", { x: x(mi), y: H - 8, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = mi + (mi === 0 ? " mi" : ""); svg.appendChild(t); }
+    const cursor = svgEl("line", { y1: T, y2: H - B, stroke: "var(--ink-3)", "stroke-dasharray": "3 3", visibility: "hidden" });
+    const dot = svgEl("circle", { r: 4, fill: "var(--chart-elev)", stroke: "var(--panel)", "stroke-width": 2, visibility: "hidden" });
+    svg.appendChild(cursor); svg.appendChild(dot);
+    svg.addEventListener("mousemove", ev => {
+      const r = svg.getBoundingClientRect(); const mi = ((ev.clientX - r.left) / r.width * W - L) / (W - L - R) * xMax;
+      let best = pts[0]; for (const p of pts) if (Math.abs(p[0] - mi) < Math.abs(best[0] - mi)) best = p;
+      cursor.setAttribute("x1", x(best[0])); cursor.setAttribute("x2", x(best[0])); cursor.setAttribute("visibility", "visible");
+      dot.setAttribute("cx", x(best[0])); dot.setAttribute("cy", y(best[1])); dot.setAttribute("visibility", "visible");
+      tip.style.display = "block"; tip.style.left = (x(best[0]) / W * 100) + "%"; tip.style.top = (y(best[1]) / H * 100) + "%";
+      tip.textContent = `mi ${best[0].toFixed(1)} · ${Math.round(best[1])} ft`;
+    });
+    svg.addEventListener("mouseleave", () => { cursor.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); tip.style.display = "none"; });
+    return wrap;
+  }
+
+  // Diverging bars around a zero baseline: headwind (warm) up, tailwind (cool) down, near-zero gray.
+  function headwindChart(rows) {
+    const W = 640, H = 150, L = 44, R = 10, T = 12, B = 26;
+    const maxAbs = Math.max(4, ...rows.map(r => Math.abs(r.head_mph)));
+    const xMax = rows[rows.length - 1].mi || 1, bw = Math.max(3, (W - L - R) / rows.length - 2);
+    const x = mi => L + (mi / xMax) * (W - L - R - bw), y = v => T + (1 - (v + maxAbs) / (2 * maxAbs)) * (H - T - B), y0 = y(0);
+    const { wrap, svg, tip } = chartFrame("Headwind (up, warm) vs tailwind (down, cool) along the route, mph", W, H);
+    svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: y0, y2: y0, stroke: "var(--chart-zero)" }));
+    [maxAbs, -maxAbs].forEach(v => { const t = svgEl("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", "font-size": 11, fill: ink() }); t.textContent = (v > 0 ? "+" : "") + Math.round(v); svg.appendChild(t); });
+    rows.forEach(r => {
+      const v = r.head_mph, top = Math.min(y0, y(v)), h = Math.max(1, Math.abs(y0 - y(v)));
+      const fill = Math.abs(v) <= 1 ? "var(--chart-zero)" : v > 0 ? "var(--chart-head)" : "var(--chart-tail)";
+      const rect = svgEl("rect", { x: x(r.mi), y: top, width: bw, height: h, fill, rx: 1.5 });
+      rect.addEventListener("mouseenter", () => { tip.style.display = "block"; tip.style.left = ((x(r.mi) + bw / 2) / W * 100) + "%"; tip.style.top = (top / H * 100) + "%"; tip.textContent = `mi ${r.mi} · ${v > 0 ? "headwind" : v < 0 ? "tailwind" : "calm"} ${Math.abs(v).toFixed(1)} mph · cross ${r.cross_mph} mph`; });
+      rect.addEventListener("mouseleave", () => tip.style.display = "none");
+      svg.appendChild(rect);
+    });
+    const step = xMax > 60 ? 20 : xMax > 25 ? 10 : xMax > 10 ? 5 : 1;
+    for (let mi = 0; mi <= xMax; mi += step) { const t = svgEl("text", { x: x(mi) + bw / 2, y: H - 8, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = mi + (mi === 0 ? " mi" : ""); svg.appendChild(t); }
+    return wrap;
+  }
+
+  function forecastStrip(hours) {
+    const strip = el("div", "hours");
+    hours.forEach(h => {
+      const c = el("div", "hour");
+      c.appendChild(el("div", "t", h.time));
+      c.appendChild(el("div", null, `${Math.round(h.temp_f)}°`));
+      const wind = el("div"); const arrow = el("span", "arrow", "➜"); arrow.style.transform = `rotate(${(h.wind_from_deg + 90) % 360}deg)`; arrow.title = `wind from ${h.wind_from}`;
+      wind.appendChild(arrow); wind.appendChild(document.createTextNode(` ${Math.round(h.wind_mph)}`)); c.appendChild(wind);
+      c.appendChild(el("div", null, `☂ ${h.precip_prob_pct ?? 0}%`));
+      const bar = el("div", "bar"); const fill = el("i"); fill.style.width = (h.ride_score || 0) + "%";
+      fill.style.background = h.ride_score >= 80 ? "var(--ok)" : h.ride_score >= 50 ? "var(--warn)" : "var(--bad)"; bar.appendChild(fill); c.appendChild(bar);
+      c.title = `${h.sky} · feels ${Math.round(h.feels_like_f)}°F · gusts ${Math.round(h.gust_mph)} mph · ride score ${h.ride_score}`;
+      strip.appendChild(c);
+    });
+    return strip;
+  }
+
+  function stopsTable(stops) {
+    const t = el("table", "stops"); const hd = t.createTHead().insertRow();
+    ["Mile", "Kind", "Name", "Hours"].forEach(h => hd.appendChild(el("th", null, h)));
+    const body = t.createTBody();
+    stops.slice(0, 30).forEach(s => { const r = body.insertRow(); [s.at_mi, s.kind, s.name, s.hours || ""].forEach(v => r.insertCell().textContent = v); });
+    return t;
+  }
+
+  function summarizeArgs(args) {
+    return Object.entries(args).map(([k, v]) => `${k}=${typeof v === "string" ? v : JSON.stringify(v)}`).join(", ");
+  }
+
+  // Visual summary per tool, with the raw JSON always available underneath.
+  function visualize(name, r) {
+    const box = el("div", "tool-viz");
+    if (r.error) { box.appendChild(el("div", null, "⚠ " + r.error + (r.hint ? "  →  " + r.hint : ""))); return box; }
+    if (name === "plan_route") {
+      box.appendChild(kpis([[fmt(r.distance_mi, 1) + " mi", "distance"], [fmt(r.ascent_ft) + " ft", "climbing"], [fmt(r.max_grade_pct, 1) + "%", "max grade"],
+        [(r.surface_pct && r.surface_pct.paved != null ? r.surface_pct.paved : "–") + "%", "paved"], [r.overall_bearing || "–", "heading"]]));
+      if (r.elevation_profile_km_m && r.elevation_profile_km_m.length > 2) box.appendChild(elevationChart(r.elevation_profile_km_m));
+      const links = el("div", "links");
+      if (r.gpx_download) { const a = el("a", null, "⬇ Download GPX"); a.href = r.gpx_download; links.appendChild(a); }
+      if (r.map_link) { const a = el("a", null, "🗺 Open on BRouter map"); a.href = r.map_link; a.target = "_blank"; a.rel = "noopener"; links.appendChild(a); }
+      box.appendChild(links);
+    } else if (name === "analyze_headwind") {
+      const t = r.time_estimate_min || {};
+      box.appendChild(kpis([[r.summary || "–", `wind from ${r.prevailing_wind_from || "?"}`], [(r.avg_headwind_component_mph > 0 ? "+" : "") + fmt(r.avg_headwind_component_mph, 1) + " mph", "avg head/tail"],
+        [(r.wind_time_penalty_min > 0 ? "+" : "") + fmt(r.wind_time_penalty_min) + " min", "wind cost"], [fmt(t.with_wind_as_planned) + " → " + fmt(t.reversed_direction), "min planned → reversed"], [r.recommend_reverse ? "yes" : "no", "reverse it?"]]));
+      if (r.exposure_by_mile && r.exposure_by_mile.length) box.appendChild(headwindChart(r.exposure_by_mile));
+    } else if (name === "get_ride_forecast") {
+      const w = r.requested_window, bw = r.best_window;
+      const k = [[r.sunrise + " / " + r.sunset, "sunrise / sunset"]];
+      if (w) k.push([w.verdict + " (" + w.avg_ride_score + ")", `ride score from ${w.start}`], [fmt(w.temp_range_f[0]) + "–" + fmt(w.temp_range_f[1]) + "°F", "temps"], [fmt(w.max_wind_mph) + " / " + fmt(w.max_gust_mph), "wind / gust mph"], [w.max_precip_prob_pct + "%", "max rain chance"]);
+      if (bw) k.push([bw.start + "–" + bw.end, "best window (" + bw.verdict + ")"]);
+      box.appendChild(kpis(k));
+      const hours = (w && w.hours) || r.daylight_hours; if (hours && hours.length) box.appendChild(forecastStrip(hours));
+    } else if (name === "find_refuel_stops") {
+      box.appendChild(kpis(Object.entries(r.counts || {}).map(([k, v]) => [v, k]).concat([[r.total || 0, "total found"]])));
+      if (r.stops && r.stops.length) box.appendChild(stopsTable(r.stops)); else box.appendChild(el("div", null, r.note || "Nothing found."));
+    } else if (name === "recommend_tire_pressure") {
+      box.appendChild(kpis([[r.front_psi + " psi", `front (${r.front_bar} bar)`], [r.rear_psi + " psi", `rear (${r.rear_bar} bar)`], [r.inputs.tire_width_mm + " mm", r.inputs.surface + (r.inputs.tubeless ? ", tubeless" : "")]]));
+      (r.notes || []).forEach(n => box.appendChild(el("div", null, "· " + n)));
+    } else if (name === "estimate_ride_effort") {
+      box.appendChild(kpis([[r.moving_time_hm, "moving time"], [fmt(r.avg_speed_mph, 1) + " mph", "avg speed"], [fmt(r.work_kj) + " kJ", "work"], [fmt(r.calories_kcal), "kcal"], [r.fueling.bottles_needed, "bottles"], [r.assumed_power_w + " W", "assumed power"]]));
+      box.appendChild(el("div", null, "Fuel: " + r.fueling.carbs));
+    } else {
+      return null;
+    }
+    return box;
+  }
+
+  function toolCard(call) {
+    let parsed = null; try { parsed = JSON.parse(call.result); } catch (e) { /* non-JSON result */ }
+    const isErr = parsed && parsed.error;
+    const card = el("div", "tool" + (isErr ? " error" : ""));
+    const head = el("div", "tool-head");
+    head.appendChild(el("span", "badge", isErr ? "tool error" : "tool call"));
+    head.appendChild(el("span", "name", call.name));
+    head.appendChild(el("span", "args", "(" + summarizeArgs(call.args || {}) + ")"));
+    head.appendChild(el("span", "chev", "▸"));
+    card.appendChild(head);
+    const body = el("div", "tool-body");
+    const viz = parsed ? visualize(call.name, parsed) : null;
+    if (viz) body.appendChild(viz);
+    const det = el("details"); det.appendChild(el("summary", null, "raw args + result"));
+    det.appendChild(el("pre", null, "args: " + JSON.stringify(call.args, null, 2) + "\n\nresult: " + (parsed ? JSON.stringify(parsed, null, 2) : call.result)));
+    body.appendChild(det);
+    card.appendChild(body);
+    head.addEventListener("click", () => card.classList.toggle("open"));
+    if (viz && !isErr && ["plan_route", "analyze_headwind"].includes(call.name)) card.classList.add("open");
+    return card;
+  }
+
+  // ---------- chat ----------
+  async function send(textOverride) {
+    const text = (textOverride != null ? textOverride : userInput.value).trim();
+    if (!text) return;
+    userInput.value = "";
+    sendBtn.disabled = true;
+    addMessage("you", text);
+    const loading = addMessage("Domestique", "Checking the road", true);
+    try {
+      const res = await fetch("/chat", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ message: text, session_id: sessionId }) });
+      if (!res.ok) throw new Error("server returned " + res.status);
+      const data = await res.json();
+      sessionId = data.session_id;
+      sessionLabel.textContent = "Session " + sessionId.slice(0, 8);
+      for (const call of data.tool_calls || []) messages.insertBefore(toolCard(call), loading);
+      loading.querySelector(".content").innerHTML = md(data.response || "(no answer)");
+      loading.classList.remove("loading");
+    } catch (e) {
+      loading.querySelector(".content").textContent = "Error: " + e.message;
+      loading.classList.remove("loading");
+    }
+    messages.scrollTop = messages.scrollHeight;
+    sendBtn.disabled = false;
+    userInput.focus();
+  }
+
+  async function newRide() {
+    if (sessionId) { try { await fetch("/clear?session_id=" + encodeURIComponent(sessionId), { method: "POST" }); } catch (e) { /* ignore */ } }
+    sessionId = null;
+    sessionLabel.textContent = "New session";
+    [...messages.querySelectorAll(".msg, .tool")].forEach(n => n.remove());
+    userInput.focus();
+  }
+
+  const samples = document.getElementById("samples");
+  SAMPLES.forEach(s => { const b = el("button", "sample", s); b.type = "button"; b.addEventListener("click", () => send(s)); samples.appendChild(b); });
+  sendBtn.addEventListener("click", () => send());
+  userInput.addEventListener("keydown", e => { if (e.key === "Enter") send(); });
+  document.getElementById("new-btn").addEventListener("click", newRide);
+  userInput.focus();
+</script>
+</body>
+</html>

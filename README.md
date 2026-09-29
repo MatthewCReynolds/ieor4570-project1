@@ -46,6 +46,10 @@ returned as `{"error": ..., "hint": ...}` so the model can fix its call or expla
 instead of crashing the loop. `plan_route` returns a `route_id` the other tools take, so the agent
 chains route -> headwind -> effort -> stops without re-routing.
 
+`get_ride_forecast` and `analyze_headwind` resolve dates and hours in the location's own timezone
+(the `tz_name`/`timezone` value Open-Meteo returns, e.g. `America/New_York`), using Python's
+`zoneinfo`. See **Run locally** below for a required dependency this pulls in.
+
 ## Frontend
 
 `index.html` is a single page with no build step. The sidebar explains what the agent is, lists the
@@ -63,6 +67,18 @@ uv run app.py                              # http://localhost:8000
 ```
 
 Optional: `MODEL=vertex_ai/gemini-3.5-flash` to use a bigger model; `PORT` and `HOST` are honored.
+
+**Timezone data:** `tools.py` resolves ride dates/hours using `zoneinfo` with a `tz_name` like
+`America/New_York`, taken from Open-Meteo's response. Some systems (e.g. Windows) don't ship an OS-level timezone database, which typically raises
+`ZoneInfoNotFoundError: 'No time zone found with key ...'`. Fix by adding the `tzdata` package,
+which bundles the database so `zoneinfo` always finds it:
+
+```bash
+uv add tzdata
+```
+
+This adds it to `pyproject.toml`/`uv.lock`, so it's installed automatically both locally and on
+Cloud Run's build. If you already deployed before adding it, push again to trigger a rebuild.
 
 Tests (LiteLLM is mocked, tools run for real): `uv run --with pytest --with httpx pytest -q`
 

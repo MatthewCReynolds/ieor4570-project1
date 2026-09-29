@@ -2,28 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
 <title>Domestique · cycling ride planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   :root {
-    --bg: #f6f4ee; --panel: #ffffff; --ink: #1c1b18; --ink-2: #5c5a52; --ink-3: #8f8c82;
-    --line: #e4e1d8; --accent: #e8590c; --accent-ink: #ffffff; --accent-soft: #fdebdd;
-    --tool: #f3f1ea; --tool-line: #d9d5c9; --ok: #2f7d4f; --warn: #b7791f; --bad: #b42318;
-    --chart-elev: #2a6f97; --chart-elev-fill: rgba(42,111,151,.15); --chart-head: #c2410c; --chart-tail: #0f766e; --chart-zero: #a8a49a;
-    --user: #1c1b18; --user-ink: #ffffff; --radius: 14px;
+    --bg: #f4f7f2; --sky: #e6efe3; --panel: #ffffff; --ink: #14211a; --ink-2: #4a5a50; --ink-3: #8a9a8f;
+    --line: #dfe6dc; --accent: #2f6b4f; --accent-ink: #ffffff; --accent-soft: #e6f0ea;
+    --tool: #eef3ec; --tool-line: #dbe4d8; --ok: #2f7d4f; --warn: #d97706; --bad: #dc2626;
+    --chart-elev: #2f6b4f; --chart-elev-fill: rgba(47,107,79,.14); --chart-head: #c2410c; --chart-tail: #0e7490; --chart-zero: #9aa89e;
+    --user: #14342a; --user-ink: #ffffff; --radius: 12px;
+    --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+    --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+    --shadow: 0 1px 2px rgba(20,33,26,.06), 0 1px 3px rgba(20,33,26,.06);
+    --cloud: rgba(255,255,255,.92); --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%23dbe8d8'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%23c6dcc4'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%239cc4a6'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%239cc4a6'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%239cc4a6'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%239cc4a6'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%239cc4a6'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%239cc4a6'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%239cc4a6'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%239cc4a6'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%239cc4a6'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%239cc4a6'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%239cc4a6'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%239cc4a6'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23b4d3b9'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%23ffffff' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E");
     color-scheme: light;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #15140f; --panel: #1f1e18; --ink: #ecebe4; --ink-2: #b4b1a6; --ink-3: #7d7a70;
-      --line: #2f2e27; --accent: #ff7a2f; --accent-soft: #3a2416; --tool: #262520; --tool-line: #3a3931;
-      --chart-elev: #6fb3d9; --chart-elev-fill: rgba(111,179,217,.18); --chart-head: #f28b5a; --chart-tail: #5fd3c4; --chart-zero: #5a584f;
-      --user: #ecebe4; --user-ink: #15140f; color-scheme: dark;
+    :root:not([data-theme="light"]) {
+      --bg: #0d1512; --sky: #101c17; --panel: #131d18; --ink: #e6efe9; --ink-2: #a3b3a9; --ink-3: #6b7c72;
+      --line: #1f2d26; --accent: #5fb388; --accent-ink: #0d1512; --accent-soft: #163224; --tool: #17231d; --tool-line: #1f2d26;
+      --chart-elev: #6fcf9b; --chart-elev-fill: rgba(111,207,155,.15); --chart-head: #fb923c; --chart-tail: #22d3ee; --chart-zero: #4b5a51;
+      --user: #e6efe9; --user-ink: #0d1512; --shadow: none; --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%232a5039'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%232a5039'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%232a5039'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%232a5039'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%232a5039'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%232a5039'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); color-scheme: dark;
+      --cloud: rgba(200,230,215,.10);
     }
+  }
+  :root[data-theme="dark"] {
+      --bg: #0d1512; --sky: #101c17; --panel: #131d18; --ink: #e6efe9; --ink-2: #a3b3a9; --ink-3: #6b7c72;
+      --line: #1f2d26; --accent: #5fb388; --accent-ink: #0d1512; --accent-soft: #163224; --tool: #17231d; --tool-line: #1f2d26;
+      --chart-elev: #6fcf9b; --chart-elev-fill: rgba(111,207,155,.15); --chart-head: #fb923c; --chart-tail: #22d3ee; --chart-zero: #4b5a51;
+      --user: #e6efe9; --user-ink: #0d1512; --shadow: none; --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%232a5039'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%232a5039'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%232a5039'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%232a5039'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%232a5039'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%232a5039'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); color-scheme: dark;
+      --cloud: rgba(200,230,215,.10);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
-  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, system-ui, sans-serif; background: var(--bg); color: var(--ink); }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--ink); }
   #layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); height: 100vh; }
   #layout > * { min-width: 0; }
   aside { border-right: 1px solid var(--line); padding: 1.5rem 1.25rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.25rem; background: var(--panel); }
@@ -35,7 +51,7 @@
   aside h2 { font-size: .72rem; text-transform: uppercase; letter-spacing: .08em; color: var(--ink-3); margin-bottom: .5rem; }
   .tools { list-style: none; display: flex; flex-direction: column; gap: .35rem; font-size: .84rem; color: var(--ink-2); }
   .tools li { display: flex; gap: .5rem; align-items: baseline; }
-  .tools code { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: .78rem; color: var(--ink); background: var(--tool); padding: .05rem .35rem; border-radius: 5px; white-space: nowrap; }
+  .tools code { font-family: var(--font-mono); font-size: .78rem; color: var(--ink); background: var(--tool); padding: .05rem .35rem; border-radius: 5px; white-space: nowrap; }
   .tools .orig { color: var(--accent); font-size: .68rem; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; }
   .samples { display: flex; flex-direction: column; gap: .4rem; }
   .sample { text-align: left; background: var(--bg); border: 1px solid var(--line); color: var(--ink); padding: .55rem .7rem; border-radius: 10px; font-size: .84rem; line-height: 1.35; cursor: pointer; }
@@ -54,7 +70,7 @@
   .msg.assistant .content ul, .msg.assistant .content ol { margin: .2rem 0 .6rem 1.2rem; }
   .msg.assistant .content li { margin-bottom: .2rem; }
   .msg.assistant .content h4 { font-size: .95rem; margin: .5rem 0 .3rem; }
-  .msg.assistant .content code { font-family: ui-monospace, Menlo, monospace; font-size: .85em; background: var(--tool); padding: .05rem .3rem; border-radius: 4px; }
+  .msg.assistant .content code { font-family: var(--font-mono); font-size: .85em; background: var(--tool); padding: .05rem .3rem; border-radius: 4px; }
   .msg.loading .content { color: var(--ink-3); font-style: italic; }
   .msg.loading .content::after { content: ""; display: inline-block; width: 1em; text-align: left; animation: dots 1.2s steps(4) infinite; }
   @keyframes dots { 0% { content: ""; } 25% { content: "."; } 50% { content: ".."; } 75% { content: "..."; } }
@@ -66,14 +82,14 @@
   .tool-head { display: flex; align-items: center; gap: .6rem; padding: .55rem .8rem; cursor: pointer; user-select: none; min-width: 0; }
   .tool-head .badge { font-size: .64rem; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); font-weight: 700; }
   .tool.error .tool-head .badge { color: var(--bad); }
-  .tool-head .name { font-family: ui-monospace, Menlo, monospace; font-weight: 600; color: var(--ink); }
-  .tool-head .args { color: var(--ink-2); font-family: ui-monospace, Menlo, monospace; font-size: .76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+  .tool-head .name { font-family: var(--font-mono); font-weight: 600; color: var(--ink); }
+  .tool-head .args { color: var(--ink-2); font-family: var(--font-mono); font-size: .76rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
   .tool-head .chev { color: var(--ink-3); transition: transform .15s; }
   .tool.open .tool-head .chev { transform: rotate(90deg); }
   .tool-body { display: none; padding: .2rem .8rem .8rem; border-top: 1px solid var(--tool-line); }
   .tool.open .tool-body { display: block; }
   .tool-viz { padding: .6rem 0 .3rem; }
-  .tool pre { font-family: ui-monospace, Menlo, monospace; font-size: .74rem; color: var(--ink-2); white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow: auto; background: var(--panel); border: 1px solid var(--tool-line); border-radius: 8px; padding: .6rem; margin-top: .5rem; }
+  .tool pre { font-family: var(--font-mono); font-size: .74rem; color: var(--ink-2); white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow: auto; background: var(--panel); border: 1px solid var(--tool-line); border-radius: 8px; padding: .6rem; margin-top: .5rem; }
   .tool details summary { cursor: pointer; color: var(--ink-3); font-size: .74rem; margin-top: .4rem; }
   .kpis { display: flex; flex-wrap: wrap; gap: .6rem; }
   .kpi { background: var(--panel); border: 1px solid var(--tool-line); border-radius: 8px; padding: .45rem .7rem; min-width: 96px; }
@@ -110,13 +126,192 @@
     main { min-height: 70vh; }
     .msg { max-width: 100%; }
   }
+  /* Motion + polish */
+  @keyframes slide-in-left  { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: none; } }
+  @keyframes slide-in-right { from { opacity: 0; transform: translateX(16px); }  to { opacity: 1; transform: none; } }
+  @keyframes rise           { from { opacity: 0; transform: translateY(8px); }   to { opacity: 1; transform: none; } }
+  .msg.assistant, .tool { animation: slide-in-left .35s cubic-bezier(.2,.8,.2,1) both; }
+  .msg.user { animation: slide-in-right .3s cubic-bezier(.2,.8,.2,1) both; }
+  .tool.open .tool-body { animation: rise .25s ease-out; }
+  .hour, .kpi { animation: rise .3s ease-out both; }
+  .kpi:nth-child(2), .hour:nth-child(2) { animation-delay: .04s; }
+  .kpi:nth-child(3), .hour:nth-child(3) { animation-delay: .08s; }
+  .kpi:nth-child(4), .hour:nth-child(4) { animation-delay: .12s; }
+  .kpi:nth-child(5), .hour:nth-child(5) { animation-delay: .16s; }
+  .msg.assistant .content, .msg.user .content, .kpi, .hour { box-shadow: var(--shadow); }
+  .tool { border-left-width: 3px; }
+  .sample, .foot button, .links a, .tool-head, #send-btn, #user-input { transition: background-color .15s, border-color .15s, color .15s, box-shadow .15s, transform .1s, filter .15s; }
+  #send-btn:hover:not(:disabled) { filter: brightness(1.08); }
+  #send-btn:active:not(:disabled) { transform: scale(.97); }
+  #user-input:focus { box-shadow: 0 0 0 3px var(--accent-soft); }
+  .tool-head:hover { background: var(--accent-soft); }
+  .brand .logo { border-radius: 8px; }
+  .sample:hover { transform: translateX(2px); }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
+  /* Typography */
+  body { font-feature-settings: "ss01", "cv11"; -webkit-font-smoothing: antialiased; }
+  .brand h1 { font-family: var(--font-display); font-size: 1.4rem; font-weight: 700; letter-spacing: -.03em; }
+  .brand small { font-family: var(--font-body); letter-spacing: 0; }
+  .kpi .v { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .msg.assistant .content h4 { font-family: var(--font-display); font-weight: 600; font-size: 1.02rem; letter-spacing: -.01em; }
+  aside h2 { font-family: var(--font-display); font-size: .82rem; font-weight: 600; text-transform: none; letter-spacing: 0; color: var(--ink-2); }
+  .msg .role, .kpi .l, .tool-head .badge, .tools .orig, table.stops th { text-transform: none; letter-spacing: 0; }
+  .msg .role { font-size: .74rem; font-weight: 500; }
+  .kpi .l { font-size: .74rem; }
+  .tool-head .badge { font-size: .72rem; font-weight: 600; }
+  .tools .orig { font-size: .72rem; }
+  table.stops th { font-size: .74rem; }
+  .tools code, .tool-head .name, .tool-head .args, .tool pre { font-size: .76rem; }
+  table.stops, .hour, .kpi .v { font-variant-numeric: tabular-nums; }
+  #user-input, #send-btn { font-family: var(--font-body); }
+  /* Nature scene behind the chat */
+  #messages { background: var(--scene) right bottom / max(100%, 900px) auto no-repeat, linear-gradient(180deg, var(--bg) 0%, var(--sky) 100%); }
+  .welcome { box-shadow: var(--shadow); border-style: solid; border-color: var(--line); }
+  #input-area { background: var(--panel); }
+  /* Animated backdrop: scene lives behind the chat, bike rides along the road */
+  main { position: relative; }
+  #messages { position: relative; z-index: 1; background: none; }
+  #input-area { position: relative; z-index: 2; }
+  .backdrop { position: absolute; top: 0; left: 0; right: 0; bottom: 80px; overflow: hidden; pointer-events: none; background: linear-gradient(180deg, var(--bg) 0%, var(--sky) 100%); }
+  .scene { position: absolute; right: 0; bottom: 0; width: max(100%, 900px); aspect-ratio: 1200 / 260; background: var(--scene) center / 100% 100% no-repeat; }
+  .rider { position: absolute; bottom: 3.5%; left: 0; width: 6%; min-width: 46px; color: var(--accent); animation: ride 26s linear infinite; }
+  .rider svg { display: block; width: 100%; height: auto; animation: bob .5s ease-in-out infinite alternate; }
+  .wheel { transform-box: fill-box; transform-origin: center; animation: spin .7s linear infinite; }
+  @keyframes ride { from { transform: translateX(-150%); } to { transform: translateX(1800%); } }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes bob { from { transform: translateY(0); } to { transform: translateY(-1.5%); } }
+  @media (prefers-reduced-motion: reduce) { .rider { left: 78%; } }
+  /* ---- Weather-aware sky ---- */
+  .backdrop { background: linear-gradient(180deg, var(--sky-a, var(--bg)) 0%, var(--sky-b, var(--sky)) 100%); transition: background 1s; }
+  .backdrop[data-tod="dawn"]  { --sky-b: color-mix(in srgb, var(--sky) 68%, #ffb37a 32%); --sun-x: 14%; --sun-y: 36%; --sun-c: #ffb066; }
+  .backdrop[data-tod="dusk"]  { --sky-a: color-mix(in srgb, var(--bg) 85%, #c9a0dc 15%); --sky-b: color-mix(in srgb, var(--sky) 65%, #ff8a5c 35%); --sun-x: 86%; --sun-y: 36%; --sun-c: #ff9a5c; }
+  .backdrop[data-tod="night"] { --sky-a: color-mix(in srgb, var(--bg) 70%, #1e3a8a 30%); --sky-b: color-mix(in srgb, var(--sky) 65%, #1e3a8a 35%); --sun-x: 70%; --sun-y: 12%; --sun-c: #dfe6ff; }
+  .sun { position: absolute; left: var(--sun-x, 72%); top: var(--sun-y, 9%); width: 54px; height: 54px; border-radius: 50%; background: radial-gradient(circle, var(--sun-c, #ffd27a) 0 58%, transparent 72%); opacity: .85; transition: left 1s, top 1s, opacity .8s; }
+  .backdrop[data-tod="night"] .sun { background: radial-gradient(circle at 36% 36%, #f6f8ff, #c3cce8 70%); box-shadow: 0 0 32px rgba(180,200,255,.4); width: 40px; height: 40px; }
+  .backdrop[data-mood="cloudy"] .sun { opacity: .35; } .backdrop[data-mood="rain"] .sun { opacity: 0; }
+  .cloud { position: absolute; left: 0; height: 32px; border-radius: 40px; background: var(--cloud); animation: drift calc(var(--cloud-t, 110s) * var(--k, 1)) linear infinite; animation-delay: var(--d, 0s); transition: opacity .8s; }
+  .cloud::before, .cloud::after { content: ""; position: absolute; background: inherit; border-radius: 50%; }
+  .cloud::before { width: 52px; height: 52px; left: 22px; top: -24px; } .cloud::after { width: 38px; height: 38px; left: 66px; top: -15px; }
+  .backdrop.rev .cloud { animation-direction: reverse; }
+  .cloud.c4, .cloud.c5 { display: none; }
+  .backdrop[data-mood="clear"] .cloud.c3 { display: none; }
+  .backdrop[data-mood="cloudy"] .cloud, .backdrop[data-mood="rain"] .cloud { --cloud: rgba(128,146,158,.5); }
+  .backdrop[data-mood="cloudy"] .cloud.c4, .backdrop[data-mood="cloudy"] .cloud.c5, .backdrop[data-mood="rain"] .cloud.c4, .backdrop[data-mood="rain"] .cloud.c5 { display: block; }
+  @keyframes drift { from { transform: translateX(-25vw); } to { transform: translateX(110vw); } }
+  .rain { position: absolute; inset: 0; opacity: 0; transition: opacity .6s; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60' stroke='rgb%28110%2C140%2C165%29' stroke-opacity='.7' stroke-width='1.3' stroke-linecap='round'%3E%3Cline x1='10' y1='5' x2='7' y2='19'/%3E%3Cline x1='35' y1='30' x2='32' y2='44'/%3E%3Cline x1='50' y1='8' x2='47' y2='22'/%3E%3Cline x1='22' y1='40' x2='19' y2='54'/%3E%3C/svg%3E") repeat; background-size: 60px 60px; animation: fall .55s linear infinite; }
+  .backdrop[data-mood="rain"] .rain { opacity: .6; }
+  @keyframes fall { to { background-position: 0 60px; } }
+
+  /* ---- Frosted glass ---- */
+  .msg.assistant .content, .welcome, .tool { -webkit-backdrop-filter: blur(10px) saturate(1.1); backdrop-filter: blur(10px) saturate(1.1); }
+  .msg.assistant .content, .welcome { background: color-mix(in srgb, var(--panel) 80%, transparent); }
+  .tool { background: color-mix(in srgb, var(--tool) 80%, transparent); }
+
+  /* ---- Empty state ---- */
+  .welcome { padding: 1.6rem; display: flex; flex-direction: column; gap: .7rem; animation: rise .5s ease-out both; }
+  .welcome h2 { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; letter-spacing: -.03em; color: var(--ink); }
+  .welcome p { max-width: 58ch; }
+  .welcome small { color: var(--ink-3); font-size: .78rem; }
+  .hero-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .6rem; margin-top: .3rem; }
+  .hero-card { text-align: left; font: inherit; font-size: .86rem; line-height: 1.4; color: var(--ink); background: color-mix(in srgb, var(--panel) 85%, transparent); border: 1px solid var(--line); border-radius: 10px; padding: .75rem .85rem; cursor: pointer; transition: border-color .15s, transform .15s, box-shadow .15s; }
+  .hero-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: var(--shadow); }
+  .started .welcome { display: none; }
+
+  /* ---- Tool icons, route draw, ride ring ---- */
+  .ico { display: inline-flex; color: var(--accent); } .tool.error .ico, .tool:not(.error) .badge { display: none; }
+  .draw { stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw 1.4s cubic-bezier(.4,0,.2,1) forwards; }
+  .area { animation: fadein 1s .5s both; }
+  @keyframes draw { to { stroke-dashoffset: 0; } } @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  @property --p { syntax: "<number>"; inherits: false; initial-value: 0; }
+  .ring { --p: 0; position: relative; width: 32px; height: 32px; margin: .35rem auto; border-radius: 50%; display: grid; place-items: center; background: conic-gradient(var(--c, var(--ok)) calc(var(--p) * 1%), var(--line) 0); font-size: .66rem; font-weight: 700; color: var(--ink); animation: fillring .9s ease-out both; }
+  .ring::before { content: ""; position: absolute; inset: 3.5px; border-radius: 50%; background: var(--panel); }
+  .ring span { position: relative; }
+  @keyframes fillring { from { --p: 0; } }
+  /* ---- Stop-animations switch (also used for reduced motion) ---- */
+  .motion-btn { position: absolute; top: .75rem; right: 1.1rem; z-index: 3; font: inherit; font-size: .76rem; padding: .35rem .7rem; border-radius: 999px; border: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 88%, transparent); color: var(--ink-2); cursor: pointer; transition: border-color .15s, color .15s; }
+  .motion-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .no-motion *, .no-motion *::before, .no-motion *::after { animation: none !important; transition: none !important; }
+  .no-motion .rider { left: 78%; }
+  .no-motion .draw { stroke-dashoffset: 0; }
+  .no-motion .c1, .c1-static { left: 8%; } .no-motion .c2 { left: 42%; } .no-motion .c3 { left: 66%; } .no-motion .c4 { left: 24%; } .no-motion .c5 { left: 84%; }
+  @media (prefers-reduced-motion: reduce) { .draw { stroke-dashoffset: 0; } .c1 { left: 8%; } .c2 { left: 42%; } .c3 { left: 66%; } .c4 { left: 24%; } .c5 { left: 84%; } }
+  /* ---- Copy/share, toast ---- */
+  #messages { padding-top: 3rem; }
+  .actions { display: flex; gap: .4rem; margin-top: .65rem; }
+  .actions button { font: inherit; font-size: .74rem; padding: .25rem .65rem; border-radius: 7px; border: 1px solid var(--line); background: transparent; color: var(--ink-2); cursor: pointer; transition: border-color .15s, color .15s; }
+  .actions button:hover { border-color: var(--accent); color: var(--accent); }
+  #toast { position: fixed; left: 50%; bottom: 5.5rem; z-index: 40; transform: translate(-50%, 8px); background: var(--ink); color: var(--bg); padding: .45rem .85rem; border-radius: 8px; font-size: .8rem; opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; }
+  #toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  /* ---- Mobile: sidebar becomes a slide-in drawer ---- */
+  .menu-btn { display: none; right: auto; left: 1rem; }
+  .scrim { display: none; }
+  @media (max-width: 860px) {
+    #layout { grid-template-rows: minmax(0, 1fr); height: 100vh; height: 100dvh; min-height: 0; }
+    main { min-height: 0; }
+    aside { position: fixed; z-index: 30; top: 0; bottom: 0; left: 0; width: min(86vw, 330px); transform: translateX(-102%); transition: transform .28s cubic-bezier(.2,.8,.2,1); border-right: 1px solid var(--line); border-bottom: none; box-shadow: 0 0 40px rgba(0,0,0,.25); }
+    .tools, .foot { display: flex; }
+    body.menu-open aside { transform: none; }
+    .scrim { display: block; position: fixed; inset: 0; z-index: 25; background: rgba(10,20,15,.45); opacity: 0; pointer-events: none; transition: opacity .25s; }
+    body.menu-open .scrim { opacity: 1; pointer-events: auto; }
+    .menu-btn { display: inline-flex; }
+    #messages { padding-top: 3.4rem; padding-left: 1rem; padding-right: 1rem; }
+    #input-area { padding: .75rem 1rem max(1rem, env(safe-area-inset-bottom)); gap: .5rem; }
+    #send-btn { padding: .8rem 1rem; }
+    .welcome { padding: 1.2rem; } .welcome h2 { font-size: 1.45rem; }
+  }
+  /* ---- Softer cloud shapes: one smooth silhouette per cloud ---- */
+  .cloud { height: auto; aspect-ratio: 200 / 80; border-radius: 0; filter: blur(.7px);
+    background: linear-gradient(180deg, var(--cloud) 35%, color-mix(in srgb, var(--cloud) 55%, transparent) 100%);
+    -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cpath d='M30 70 C10 70 4 48 24 42 C22 24 44 14 60 26 C68 6 104 0 116 24 C128 12 158 16 160 38 C184 34 198 62 176 70 Z' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 80'%3E%3Cpath d='M30 70 C10 70 4 48 24 42 C22 24 44 14 60 26 C68 6 104 0 116 24 C128 12 158 16 160 38 C184 34 198 62 176 70 Z' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+  .cloud::before, .cloud::after { display: none; }
+  .cloud.c2, .cloud.c4, .cloud.c5 { aspect-ratio: 200 / 70; -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 70'%3E%3Cpath d='M18 62 C-2 62 -2 40 20 38 C22 22 46 18 58 30 C68 12 98 12 108 30 C118 22 138 24 144 38 C170 34 188 46 180 62 Z' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat; mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 70'%3E%3Cpath d='M18 62 C-2 62 -2 40 20 38 C22 22 46 18 58 30 C68 12 98 12 108 30 C118 22 138 24 144 38 C170 34 188 46 180 62 Z' fill='black'/%3E%3C/svg%3E") center / 100% 100% no-repeat; }
+  /* ---- Follow-up chips ---- */
+  .chips { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .6rem; }
+  .chip { font: inherit; font-size: .8rem; padding: .4rem .8rem; border-radius: 999px; border: 1px solid var(--line); background: color-mix(in srgb, var(--panel) 85%, transparent); color: var(--ink); cursor: pointer; animation: rise .3s ease-out both; transition: border-color .15s, color .15s, background-color .15s; }
+  .chip:nth-child(2) { animation-delay: .06s; } .chip:nth-child(3) { animation-delay: .12s; }
+  .chip:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-soft); }
+
+  /* ---- Seasonal particles (chosen by today's date) ---- */
+  .seasonal { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+  .seasonal i { position: absolute; top: -30px; width: var(--s); height: var(--s); opacity: .8; animation: drift-down var(--t) linear infinite; animation-delay: var(--d); }
+  @keyframes drift-down { 0% { transform: translate3d(0, 0, 0) rotate(0); } 50% { transform: translate3d(calc(var(--dx) * -.5 + 24px), 55vh, 0) rotate(calc(var(--r) * .5)); } 100% { transform: translate3d(var(--dx), 110vh, 0) rotate(var(--r)); } }
+  @keyframes float-up { 0%, 100% { transform: translate(0, 0); opacity: .15; } 50% { transform: translate(var(--dx), -34px); opacity: .95; } }
+  .seasonal.autumn i { border-radius: 0 100% 0 100%; background: #d9531e; }
+  .seasonal.autumn i:nth-child(4n+2) { background: #e8a317; } .seasonal.autumn i:nth-child(4n+3) { background: #b8331b; } .seasonal.autumn i:nth-child(4n) { background: #c98a2b; }
+  .seasonal.spring i { border-radius: 60% 0 60% 40%; background: #f6b8cf; } .seasonal.spring i:nth-child(2n) { background: #fbd3e2; }
+  .seasonal.winter i { width: calc(var(--s) * .5); height: calc(var(--s) * .5); border-radius: 50%; background: #fff; box-shadow: 0 0 3px rgba(110,140,165,.6); }
+  .seasonal.summer i { top: calc(30% + var(--y) * 1%); width: calc(var(--s) * .4); height: calc(var(--s) * .4); border-radius: 50%; background: #ffe27a; box-shadow: 0 0 8px 2px rgba(255,226,122,.7); animation-name: float-up; animation-duration: calc(var(--t) * .5); animation-direction: alternate; }
+  .no-motion .seasonal { display: none; }
+  @media (prefers-reduced-motion: reduce) { .seasonal { display: none; } }
+  /* ---- Season palettes: hills, trees, road and bike follow the season ---- */
+  .rider { color: var(--bike, var(--accent)); }
+  .backdrop[data-season="spring"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%23e4efd8'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%23cfe4bf'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%237fb36e'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%237fb36e'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%23a3cf8e'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%23a3cf8e'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%237fb36e'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%237fb36e'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%23a3cf8e'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%23a3cf8e'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%237fb36e'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%237fb36e'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%23a3cf8e'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%23a3cf8e'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23bcd9a8'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%23ffffff' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #3f8a4f; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .backdrop[data-season="spring"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261c'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231c3324'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232f5a3a'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232f5a3a'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%233a6b46'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%233a6b46'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232f5a3a'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232f5a3a'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%233a6b46'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%233a6b46'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232f5a3a'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232f5a3a'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%233a6b46'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%233a6b46'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23234030'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #8be0a6; } }
+  :root[data-theme="dark"] .backdrop[data-season="spring"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261c'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231c3324'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232f5a3a'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232f5a3a'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%233a6b46'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%233a6b46'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232f5a3a'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232f5a3a'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%233a6b46'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%233a6b46'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232f5a3a'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232f5a3a'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%233a6b46'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%233a6b46'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23234030'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #8be0a6; }
+  .backdrop[data-season="summer"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%23dbe8d8'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%23c6dcc4'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%239cc4a6'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%239cc4a6'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%237fb08c'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%237fb08c'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%239cc4a6'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%239cc4a6'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%237fb08c'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%237fb08c'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%239cc4a6'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%239cc4a6'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%237fb08c'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%237fb08c'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23b4d3b9'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%23ffffff' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #2f6b4f; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .backdrop[data-season="summer"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%2333614a'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%2333614a'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%2333614a'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%2333614a'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%2333614a'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%2333614a'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #6fcf9b; } }
+  :root[data-theme="dark"] .backdrop[data-season="summer"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%2333614a'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%2333614a'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%2333614a'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%2333614a'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%2333614a'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%2333614a'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #6fcf9b; }
+  .backdrop[data-season="autumn"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%23ecd9b8'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%23e0c08f'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%23c25a1f'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%23c25a1f'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%23dc9a2b'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%23dc9a2b'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%23c25a1f'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%23c25a1f'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%23dc9a2b'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%23dc9a2b'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%23c25a1f'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%23c25a1f'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%23dc9a2b'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%23dc9a2b'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23d1a66a'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%23fff6e6' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #8a3d12; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .backdrop[data-season="autumn"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%232a2016'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%233a2b1a'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%238a4a1c'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%238a4a1c'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%23a8741f'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%23a8741f'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%238a4a1c'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%238a4a1c'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%23a8741f'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%23a8741f'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%238a4a1c'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%238a4a1c'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%23a8741f'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%23a8741f'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%234a3520'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%235a4530' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #f0a45a; } }
+  :root[data-theme="dark"] .backdrop[data-season="autumn"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%232a2016'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%233a2b1a'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%238a4a1c'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%238a4a1c'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%23a8741f'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%23a8741f'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%238a4a1c'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%238a4a1c'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%23a8741f'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%23a8741f'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%238a4a1c'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%238a4a1c'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%23a8741f'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%23a8741f'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%234a3520'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%235a4530' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #f0a45a; }
+  .backdrop[data-season="winter"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%23e6edf3'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%23d5dfe9'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%237d9aa6'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%237d9aa6'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%2394b0bb'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%2394b0bb'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%237d9aa6'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%237d9aa6'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%2394b0bb'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%2394b0bb'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%237d9aa6'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%237d9aa6'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%2394b0bb'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%2394b0bb'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23c4d1de'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%23ffffff' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #33586b; }
+  @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .backdrop[data-season="winter"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%23141c26'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231a2533'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%2333495e'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%2333495e'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%233f5a72'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%233f5a72'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%2333495e'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%2333495e'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%233f5a72'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%233f5a72'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%2333495e'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%2333495e'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%233f5a72'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%233f5a72'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23212f40'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%2333475a' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #8fc3e6; } }
+  :root[data-theme="dark"] .backdrop[data-season="winter"] .scene { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%23141c26'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231a2533'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%2333495e'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%2333495e'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%233f5a72'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%233f5a72'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%2333495e'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%2333495e'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%233f5a72'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%233f5a72'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%2333495e'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%2333495e'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%233f5a72'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%233f5a72'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%23212f40'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%2333475a' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); --bike: #8fc3e6; }
+  /* Sky and sun warm up or cool down with the season (time-of-day tints still win) */
+  .backdrop[data-season="autumn"]:not([data-tod]) { --sky-b: color-mix(in srgb, var(--sky) 72%, #f0c890 28%); }
+  .backdrop[data-season="spring"]:not([data-tod]) { --sky-b: color-mix(in srgb, var(--sky) 80%, #f7d6e4 20%); }
+  .backdrop[data-season="winter"]:not([data-tod]) { --sky-b: color-mix(in srgb, var(--sky) 75%, #cfe0f0 25%); }
+  .backdrop[data-season="autumn"]:not([data-tod="dawn"]):not([data-tod="dusk"]):not([data-tod="night"]) { --sun-c: #ffb35c; }
+  .backdrop[data-season="spring"]:not([data-tod="dawn"]):not([data-tod="dusk"]):not([data-tod="night"]) { --sun-c: #ffe08a; }
+  .backdrop[data-season="winter"]:not([data-tod="dawn"]):not([data-tod="dusk"]):not([data-tod="night"]) { --sun-c: #f4f7ff; }
 </style>
 </head>
 <body>
 <div id="layout">
   <aside>
     <div class="brand">
-      <div class="logo">D</div>
+      <div class="logo"><svg viewBox='0 0 44 32' width='26' height='19' fill='none' stroke='currentColor' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><circle cx='10' cy='22' r='8'/><circle cx='34' cy='22' r='8'/><path d='M10 22 L19 11 L30 11 L34 22 M30 11 L21 22 L10 22 M19 11 L21 22 M16 9 L22 9 M30 11 L29 7 L33 7'/></svg></div>
       <h1>Domestique <small>your AI ride-planning teammate</small></h1>
     </div>
     <p class="tagline">Tell it where you want to ride and when. It plans the route, reads the wind hour by hour, finds water and coffee on the way, sets your tire pressure, and tells you how long you'll be out.</p>
@@ -138,16 +333,18 @@
     <div class="foot">
       <span>Every tool call the agent makes is shown inline. Click one to open the result.</span>
       <span id="session">New session</span>
+      <span>Shortcuts: / to focus, Esc to clear, Up arrow for your last prompt</span>
       <button id="new-btn" type="button">Start a new ride</button>
+      <button id="theme-btn" type="button">Switch light / dark</button>
+      <button id="units-btn" type="button">Units: miles / feet</button>
     </div>
   </aside>
   <main>
+    <button id="menu-btn" class="motion-btn menu-btn" type="button" aria-label="Open menu">Menu</button>
+    <button id="motion-btn" class="motion-btn" type="button" aria-pressed="false">Stop animations</button>
+    <div class="backdrop" id="backdrop" aria-hidden="true"><div class="sun"></div><div class="cloud c1" style="top:9%;width:170px;--k:1;--d:-30s"></div><div class="cloud c2" style="top:22%;width:130px;--k:1.35;--d:-70s"></div><div class="cloud c3" style="top:15%;width:200px;--k:.8;--d:-10s"></div><div class="cloud c4" style="top:30%;width:150px;--k:1.2;--d:-55s"></div><div class="cloud c5" style="top:4%;width:160px;--k:1.5;--d:-90s"></div><div class="scene"><div class="rider"><svg viewBox="0 0 44 32" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><g class="wheel"><circle cx="10" cy="22" r="8"/><path d="M10 14V30M2 22H18"/></g><g class="wheel"><circle cx="34" cy="22" r="8"/><path d="M34 14V30M26 22H42"/></g><path class="frame" d="M10 22L19 11H30L34 22M30 11L21 22H10M19 11L21 22M16 9H22M30 11L29 7H33"/></svg></div></div><div class="seasonal" id="seasonal"></div><div class="rain"></div></div>
     <div id="messages">
-      <div class="welcome">
-        <strong>How to use it:</strong> ask like you'd text a riding buddy. Name a start and destination and it will route it.
-        Mention a day or time and it will pull that hour's wind. Give your weight, tires or watts and it will use them; otherwise it assumes a 165 lb rider at 150 W and says so.
-        It remembers the conversation, so follow-ups like "where can I refill on that route?" work.
-      </div>
+      <div class="welcome"><h2 id="greeting">Where are we riding?</h2><p>Name a start and a destination, add a day and time, and I'll plan the route, read the wind hour by hour, and find water and coffee along the way.</p><div class="hero-cards" id="hero-cards"></div><small>Assumes a 165 lb rider at 150 W unless you say otherwise.</small></div>
     </div>
     <div id="input-area">
       <input type="text" id="user-input" placeholder="Plan a road ride from Columbia University to Nyack, NY tomorrow at 8am" autocomplete="off" />
@@ -155,6 +352,8 @@
     </div>
   </main>
 </div>
+<div class="scrim" id="scrim"></div>
+<div id="toast" role="status"></div>
 <script>
   const SAMPLES = [
     "Is tomorrow morning good for a ride in Nyack, NY? Leaving at 8 for about 3 hours.",
@@ -194,7 +393,7 @@
 
   function addMessage(role, text, isLoading = false) {
     const div = el("div", "msg " + (role === "you" ? "user" : "assistant") + (isLoading ? " loading" : ""));
-    div.appendChild(el("div", "role", role));
+    div.appendChild(el("div", "role", role === "you" ? "You" : role));
     const content = el("div", "content");
     if (role === "you") content.textContent = text; else content.innerHTML = md(text);
     div.appendChild(content);
@@ -222,20 +421,20 @@
 
   // Single-series area chart: one hue, thin line, crosshair tooltip.
   function elevationChart(profile) {
-    const pts = profile.map(([km, m]) => [km / 1.609344, m * 3.28084]);
+    const pts = profile.map(([km, m]) => metric ? [km, m] : [km / 1.609344, m * 3.28084]);
     const W = 640, H = 150, L = 44, R = 10, T = 10, B = 26;
     const xMax = pts[pts.length - 1][0] || 1;
     const ys = pts.map(p => p[1]); let yMin = Math.min(...ys), yMax = Math.max(...ys);
     if (yMax - yMin < 100) { const mid = (yMax + yMin) / 2; yMin = mid - 50; yMax = mid + 50; }
     const x = mi => L + (mi / xMax) * (W - L - R), y = ft => T + (1 - (ft - yMin) / (yMax - yMin)) * (H - T - B);
-    const { wrap, svg, tip } = chartFrame("Elevation profile (ft over miles)", W, H);
+    const { wrap, svg, tip } = chartFrame(metric ? "Elevation profile (m over km)" : "Elevation profile (ft over miles)", W, H);
     const line = pts.map((p, i) => (i ? "L" : "M") + x(p[0]).toFixed(1) + " " + y(p[1]).toFixed(1)).join(" ");
-    svg.appendChild(svgEl("path", { d: line + ` L${x(xMax)} ${H - B} L${L} ${H - B} Z`, fill: "var(--chart-elev-fill)", stroke: "none" }));
-    svg.appendChild(svgEl("path", { d: line, fill: "none", stroke: "var(--chart-elev)", "stroke-width": 2, "stroke-linejoin": "round" }));
+    svg.appendChild(svgEl("path", { d: line + ` L${x(xMax)} ${H - B} L${L} ${H - B} Z`, fill: "var(--chart-elev-fill)", stroke: "none", class: "area" }));
+    svg.appendChild(svgEl("path", { d: line, fill: "none", stroke: "var(--chart-elev)", "stroke-width": 2, "stroke-linejoin": "round", pathLength: 1, class: "draw" }));
     [yMin, yMax].forEach(v => { const t = svgEl("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", "font-size": 11, fill: ink() }); t.textContent = Math.round(v); svg.appendChild(t); });
     svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: H - B, y2: H - B, stroke: "var(--tool-line)" }));
     const step = xMax > 60 ? 20 : xMax > 25 ? 10 : xMax > 10 ? 5 : 1;
-    for (let mi = 0; mi <= xMax; mi += step) { const t = svgEl("text", { x: x(mi), y: H - 8, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = mi + (mi === 0 ? " mi" : ""); svg.appendChild(t); }
+    for (let mi = 0; mi <= xMax; mi += step) { const t = svgEl("text", { x: x(mi), y: H - 8, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = mi + (mi === 0 ? " " + du() : ""); svg.appendChild(t); }
     const cursor = svgEl("line", { y1: T, y2: H - B, stroke: "var(--ink-3)", "stroke-dasharray": "3 3", visibility: "hidden" });
     const dot = svgEl("circle", { r: 4, fill: "var(--chart-elev)", stroke: "var(--panel)", "stroke-width": 2, visibility: "hidden" });
     svg.appendChild(cursor); svg.appendChild(dot);
@@ -245,7 +444,7 @@
       cursor.setAttribute("x1", x(best[0])); cursor.setAttribute("x2", x(best[0])); cursor.setAttribute("visibility", "visible");
       dot.setAttribute("cx", x(best[0])); dot.setAttribute("cy", y(best[1])); dot.setAttribute("visibility", "visible");
       tip.style.display = "block"; tip.style.left = (x(best[0]) / W * 100) + "%"; tip.style.top = (y(best[1]) / H * 100) + "%";
-      tip.textContent = `mi ${best[0].toFixed(1)} · ${Math.round(best[1])} ft`;
+      tip.textContent = `${du()} ${best[0].toFixed(1)} · ${Math.round(best[1])} ${metric ? "m" : "ft"}`;
     });
     svg.addEventListener("mouseleave", () => { cursor.setAttribute("visibility", "hidden"); dot.setAttribute("visibility", "hidden"); tip.style.display = "none"; });
     return wrap;
@@ -253,23 +452,24 @@
 
   // Diverging bars around a zero baseline: headwind (warm) up, tailwind (cool) down, near-zero gray.
   function headwindChart(rows) {
+    rows = rows.map(r => ({ ...r, mi: metric ? r.mi * 1.609344 : r.mi, head_mph: sp(r.head_mph), cross_mph: sp(r.cross_mph) }));
     const W = 640, H = 150, L = 44, R = 10, T = 12, B = 26;
     const maxAbs = Math.max(4, ...rows.map(r => Math.abs(r.head_mph)));
     const xMax = rows[rows.length - 1].mi || 1, bw = Math.max(3, (W - L - R) / rows.length - 2);
     const x = mi => L + (mi / xMax) * (W - L - R - bw), y = v => T + (1 - (v + maxAbs) / (2 * maxAbs)) * (H - T - B), y0 = y(0);
-    const { wrap, svg, tip } = chartFrame("Headwind (up, warm) vs tailwind (down, cool) along the route, mph", W, H);
+    const { wrap, svg, tip } = chartFrame(`Headwind (up, warm) vs tailwind (down, cool) along the route, ${su()}`, W, H);
     svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: y0, y2: y0, stroke: "var(--chart-zero)" }));
     [maxAbs, -maxAbs].forEach(v => { const t = svgEl("text", { x: L - 6, y: y(v) + 4, "text-anchor": "end", "font-size": 11, fill: ink() }); t.textContent = (v > 0 ? "+" : "") + Math.round(v); svg.appendChild(t); });
     rows.forEach(r => {
       const v = r.head_mph, top = Math.min(y0, y(v)), h = Math.max(1, Math.abs(y0 - y(v)));
       const fill = Math.abs(v) <= 1 ? "var(--chart-zero)" : v > 0 ? "var(--chart-head)" : "var(--chart-tail)";
       const rect = svgEl("rect", { x: x(r.mi), y: top, width: bw, height: h, fill, rx: 1.5 });
-      rect.addEventListener("mouseenter", () => { tip.style.display = "block"; tip.style.left = ((x(r.mi) + bw / 2) / W * 100) + "%"; tip.style.top = (top / H * 100) + "%"; tip.textContent = `mi ${r.mi} · ${v > 0 ? "headwind" : v < 0 ? "tailwind" : "calm"} ${Math.abs(v).toFixed(1)} mph · cross ${r.cross_mph} mph`; });
+      rect.addEventListener("mouseenter", () => { tip.style.display = "block"; tip.style.left = ((x(r.mi) + bw / 2) / W * 100) + "%"; tip.style.top = (top / H * 100) + "%"; tip.textContent = `${du()} ${fmt(r.mi, 1)} · ${v > 0 ? "headwind" : v < 0 ? "tailwind" : "calm"} ${Math.abs(v).toFixed(1)} ${su()} · cross ${fmt(r.cross_mph, 1)} ${su()}`; });
       rect.addEventListener("mouseleave", () => tip.style.display = "none");
       svg.appendChild(rect);
     });
     const step = xMax > 60 ? 20 : xMax > 25 ? 10 : xMax > 10 ? 5 : 1;
-    for (let mi = 0; mi <= xMax; mi += step) { const t = svgEl("text", { x: x(mi) + bw / 2, y: H - 8, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = mi + (mi === 0 ? " mi" : ""); svg.appendChild(t); }
+    for (let mi = 0; mi <= xMax; mi += step) { const t = svgEl("text", { x: x(mi) + bw / 2, y: H - 8, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = mi + (mi === 0 ? " " + du() : ""); svg.appendChild(t); }
     return wrap;
   }
 
@@ -278,13 +478,13 @@
     hours.forEach(h => {
       const c = el("div", "hour");
       c.appendChild(el("div", "t", h.time));
-      c.appendChild(el("div", null, `${Math.round(h.temp_f)}°`));
+      c.appendChild(el("div", null, `${fmtTemp(h.temp_f)}°`));
       const wind = el("div"); const arrow = el("span", "arrow", "➜"); arrow.style.transform = `rotate(${(h.wind_from_deg + 90) % 360}deg)`; arrow.title = `wind from ${h.wind_from}`;
-      wind.appendChild(arrow); wind.appendChild(document.createTextNode(` ${Math.round(h.wind_mph)}`)); c.appendChild(wind);
+      wind.appendChild(arrow); wind.appendChild(document.createTextNode(` ${Math.round(sp(h.wind_mph))}`)); c.appendChild(wind);
       c.appendChild(el("div", null, `☂ ${h.precip_prob_pct ?? 0}%`));
-      const bar = el("div", "bar"); const fill = el("i"); fill.style.width = (h.ride_score || 0) + "%";
-      fill.style.background = h.ride_score >= 80 ? "var(--ok)" : h.ride_score >= 50 ? "var(--warn)" : "var(--bad)"; bar.appendChild(fill); c.appendChild(bar);
-      c.title = `${h.sky} · feels ${Math.round(h.feels_like_f)}°F · gusts ${Math.round(h.gust_mph)} mph · ride score ${h.ride_score}`;
+      const ring = el("div", "ring"); const sc = h.ride_score || 0; ring.style.setProperty("--p", sc);
+      ring.style.setProperty("--c", sc >= 80 ? "var(--ok)" : sc >= 50 ? "var(--warn)" : "var(--bad)"); ring.appendChild(el("span", null, sc)); c.appendChild(ring);
+      c.title = `${h.sky} · feels ${fmtTemp(h.feels_like_f)}${tu()} · gusts ${Math.round(sp(h.gust_mph))} ${su()} · ride score ${h.ride_score}`;
       strip.appendChild(c);
     });
     return strip;
@@ -292,9 +492,9 @@
 
   function stopsTable(stops) {
     const t = el("table", "stops"); const hd = t.createTHead().insertRow();
-    ["Mile", "Kind", "Name", "Hours"].forEach(h => hd.appendChild(el("th", null, h)));
+    [metric ? "Km" : "Mile", "Kind", "Name", "Hours"].forEach(h => hd.appendChild(el("th", null, h)));
     const body = t.createTBody();
-    stops.slice(0, 30).forEach(s => { const r = body.insertRow(); [s.at_mi, s.kind, s.name, s.hours || ""].forEach(v => r.insertCell().textContent = v); });
+    stops.slice(0, 30).forEach(s => { const r = body.insertRow(); [metric ? fmt(s.at_mi * 1.609344, 1) : s.at_mi, s.kind, s.name, s.hours || ""].forEach(v => r.insertCell().textContent = v); });
     return t;
   }
 
@@ -307,7 +507,7 @@
     const box = el("div", "tool-viz");
     if (r.error) { box.appendChild(el("div", null, "⚠ " + r.error + (r.hint ? "  →  " + r.hint : ""))); return box; }
     if (name === "plan_route") {
-      box.appendChild(kpis([[fmt(r.distance_mi, 1) + " mi", "distance"], [fmt(r.ascent_ft) + " ft", "climbing"], [fmt(r.max_grade_pct, 1) + "%", "max grade"],
+      box.appendChild(kpis([[fmtDist(r.distance_mi), "distance"], [fmtElev(r.ascent_ft), "climbing"], [fmt(r.max_grade_pct, 1) + "%", "max grade"],
         [(r.surface_pct && r.surface_pct.paved != null ? r.surface_pct.paved : "–") + "%", "paved"], [r.overall_bearing || "–", "heading"]]));
       if (r.elevation_profile_km_m && r.elevation_profile_km_m.length > 2) box.appendChild(elevationChart(r.elevation_profile_km_m));
       const links = el("div", "links");
@@ -316,13 +516,13 @@
       box.appendChild(links);
     } else if (name === "analyze_headwind") {
       const t = r.time_estimate_min || {};
-      box.appendChild(kpis([[r.summary || "–", `wind from ${r.prevailing_wind_from || "?"}`], [(r.avg_headwind_component_mph > 0 ? "+" : "") + fmt(r.avg_headwind_component_mph, 1) + " mph", "avg head/tail"],
+      box.appendChild(kpis([[r.summary || "–", `wind from ${r.prevailing_wind_from || "?"}`], [(r.avg_headwind_component_mph > 0 ? "+" : "") + fmt(sp(r.avg_headwind_component_mph), 1) + " " + su(), "avg head/tail"],
         [(r.wind_time_penalty_min > 0 ? "+" : "") + fmt(r.wind_time_penalty_min) + " min", "wind cost"], [fmt(t.with_wind_as_planned) + " → " + fmt(t.reversed_direction), "min planned → reversed"], [r.recommend_reverse ? "yes" : "no", "reverse it?"]]));
       if (r.exposure_by_mile && r.exposure_by_mile.length) box.appendChild(headwindChart(r.exposure_by_mile));
     } else if (name === "get_ride_forecast") {
       const w = r.requested_window, bw = r.best_window;
       const k = [[r.sunrise + " / " + r.sunset, "sunrise / sunset"]];
-      if (w) k.push([w.verdict + " (" + w.avg_ride_score + ")", `ride score from ${w.start}`], [fmt(w.temp_range_f[0]) + "–" + fmt(w.temp_range_f[1]) + "°F", "temps"], [fmt(w.max_wind_mph) + " / " + fmt(w.max_gust_mph), "wind / gust mph"], [w.max_precip_prob_pct + "%", "max rain chance"]);
+      if (w) k.push([w.verdict + " (" + w.avg_ride_score + ")", `ride score from ${w.start}`], [fmtTemp(w.temp_range_f[0]) + "–" + fmtTemp(w.temp_range_f[1]) + tu(), "temps"], [fmt(sp(w.max_wind_mph)) + " / " + fmt(sp(w.max_gust_mph)), "wind / gust " + su()], [w.max_precip_prob_pct + "%", "max rain chance"]);
       if (bw) k.push([bw.start + "–" + bw.end, "best window (" + bw.verdict + ")"]);
       box.appendChild(kpis(k));
       const hours = (w && w.hours) || r.daylight_hours; if (hours && hours.length) box.appendChild(forecastStrip(hours));
@@ -330,10 +530,10 @@
       box.appendChild(kpis(Object.entries(r.counts || {}).map(([k, v]) => [v, k]).concat([[r.total || 0, "total found"]])));
       if (r.stops && r.stops.length) { const w = el("div", "table-wrap"); w.appendChild(stopsTable(r.stops)); box.appendChild(w); } else box.appendChild(el("div", null, r.note || "Nothing found."));
     } else if (name === "recommend_tire_pressure") {
-      box.appendChild(kpis([[r.front_psi + " psi", `front (${r.front_bar} bar)`], [r.rear_psi + " psi", `rear (${r.rear_bar} bar)`], [r.inputs.tire_width_mm + " mm", r.inputs.surface + (r.inputs.tubeless ? ", tubeless" : "")]]));
+      box.appendChild(kpis([[metric ? r.front_bar + " bar" : r.front_psi + " psi", `front (${metric ? r.front_psi + " psi" : r.front_bar + " bar"})`], [metric ? r.rear_bar + " bar" : r.rear_psi + " psi", `rear (${metric ? r.rear_psi + " psi" : r.rear_bar + " bar"})`], [r.inputs.tire_width_mm + " mm", r.inputs.surface + (r.inputs.tubeless ? ", tubeless" : "")]]));
       (r.notes || []).forEach(n => box.appendChild(el("div", null, "· " + n)));
     } else if (name === "estimate_ride_effort") {
-      box.appendChild(kpis([[r.moving_time_hm, "moving time"], [fmt(r.avg_speed_mph, 1) + " mph", "avg speed"], [fmt(r.work_kj) + " kJ", "work"], [fmt(r.calories_kcal), "kcal"], [r.fueling.bottles_needed, "bottles"], [r.assumed_power_w + " W", "assumed power"]]));
+      box.appendChild(kpis([[r.moving_time_hm, "moving time"], [fmt(sp(r.avg_speed_mph), 1) + " " + su(), "avg speed"], [fmt(r.work_kj) + " kJ", "work"], [fmt(r.calories_kcal), "kcal"], [r.fueling.bottles_needed, "bottles"], [r.assumed_power_w + " W", "assumed power"]]));
       box.appendChild(el("div", null, "Fuel: " + r.fueling.carbs));
     } else {
       return null;
@@ -344,8 +544,9 @@
   function toolCard(call) {
     let parsed = null; try { parsed = JSON.parse(call.result); } catch (e) { /* non-JSON result */ }
     const isErr = parsed && parsed.error;
-    const card = el("div", "tool" + (isErr ? " error" : ""));
+    const card = el("div", "tool" + (isErr ? " error" : "")); card._call = call;
     const head = el("div", "tool-head");
+    const ico = el("span", "ico"); if (ICONS[call.name]) ico.innerHTML = `<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${ICONS[call.name]}</svg>`; head.appendChild(ico);
     head.appendChild(el("span", "badge", isErr ? "tool error" : "tool call"));
     head.appendChild(el("span", "name", call.name));
     head.appendChild(el("span", "args", "(" + summarizeArgs(call.args || {}) + ")"));
@@ -367,8 +568,8 @@
   async function send(textOverride) {
     const text = (textOverride != null ? textOverride : userInput.value).trim();
     if (!text) return;
-    userInput.value = "";
-    sendBtn.disabled = true;
+    userInput.value = ""; lastPrompt = text;
+    sendBtn.disabled = true; messages.classList.add("started"); document.querySelectorAll(".chips").forEach(n => n.remove()); document.body.classList.remove("menu-open"); setPace(3.5);
     addMessage("you", text);
     const loading = addMessage("Domestique", "Checking the road", true);
     try {
@@ -377,26 +578,158 @@
       const data = await res.json();
       sessionId = data.session_id;
       sessionLabel.textContent = "Session " + sessionId.slice(0, 8);
-      for (const call of data.tool_calls || []) messages.insertBefore(toolCard(call), loading);
-      loading.querySelector(".content").innerHTML = md(data.response || "(no answer)");
+      for (const call of data.tool_calls || []) { messages.insertBefore(toolCard(call), loading); try { if (call.name === "get_ride_forecast") applyWeather(JSON.parse(call.result)); } catch (e) { /* ignore */ } }
       loading.classList.remove("loading");
+      const answer = data.response || "(no answer)";
+      typeOut(loading.querySelector(".content"), answer, () => addActions(loading, answer, data.tool_calls));
     } catch (e) {
       loading.querySelector(".content").textContent = "Error: " + e.message;
       loading.classList.remove("loading");
     }
     messages.scrollTop = messages.scrollHeight;
-    sendBtn.disabled = false;
+    sendBtn.disabled = false; setPace(1);
     userInput.focus();
   }
 
   async function newRide() {
     if (sessionId) { try { await fetch("/clear?session_id=" + encodeURIComponent(sessionId), { method: "POST" }); } catch (e) { /* ignore */ } }
     sessionId = null;
-    sessionLabel.textContent = "New session";
+    sessionLabel.textContent = "New session"; messages.classList.remove("started"); applyWeather(null); document.getElementById("greeting").textContent = greeting();
     [...messages.querySelectorAll(".msg, .tool")].forEach(n => n.remove());
     userInput.focus();
   }
 
+  const ICONS = {
+    plan_route: '<circle cx="6" cy="19" r="2"/><circle cx="18" cy="5" r="2"/><path d="M8.5 19H14a3.5 3.5 0 000-7h-4a3.5 3.5 0 010-7h5.5"/>',
+    get_ride_forecast: '<path d="M7 18a4 4 0 010-8 5 5 0 019.6-1A4.5 4.5 0 0117 18z"/>',
+    analyze_headwind: '<path d="M3 8h10a3 3 0 10-3-3M3 12h15a3 3 0 11-3 3M3 16h7"/>',
+    find_refuel_stops: '<path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5zM16 10h2a2.5 2.5 0 010 5h-2M8 3v3M12 3v3"/>',
+    recommend_tire_pressure: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v5.5M12 15.5V21M3 12h5.5M15.5 12H21"/>',
+    estimate_ride_effort: '<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
+  };
+  // Backdrop reacts to the forecast: sky tint by time, clouds drift with the wind, rain if likely.
+  function applyWeather(r) {
+    const b = document.getElementById("backdrop");
+    if (!r || r.error) { delete b.dataset.mood; delete b.dataset.tod; b.classList.remove("rev"); b.style.removeProperty("--cloud-t"); return; }
+    const w = r.requested_window, h = (w && w.hours && w.hours[0]) || (r.daylight_hours || [])[0];
+    if (!h) return;
+    const rain = (w ? w.max_precip_prob_pct : h.precip_prob_pct) || 0;
+    b.dataset.mood = rain >= 50 ? "rain" : (/cloud|overcast|fog/i.test(h.sky || "") || rain >= 25) ? "cloudy" : "clear";
+    const m = /(\d{1,2})(?::\d{2})?\s*([ap]m)?/i.exec((w && w.start) || h.time || "");
+    let hr = m ? +m[1] : 12; if (m && m[2]) { const pm = m[2].toLowerCase() === "pm"; if (pm && hr < 12) hr += 12; if (!pm && hr === 12) hr = 0; }
+    b.dataset.tod = hr < 5 || hr >= 20 ? "night" : hr < 8 ? "dawn" : hr < 17 ? "day" : "dusk";
+    b.classList.toggle("rev", Math.sin(((h.wind_from_deg || 0) + 180) * Math.PI / 180) < 0);
+    b.style.setProperty("--cloud-t", Math.max(25, 130 - (h.wind_mph || 0) * 5) + "s");
+  }
+  // Bike speeds up while the agent works, cruises when idle.
+  function setPace(rate) {
+    document.querySelectorAll(".rider, .rider svg, .rider .wheel").forEach(n => n.getAnimations().forEach(a => a.updatePlaybackRate ? a.updatePlaybackRate(rate) : (a.playbackRate = rate)));
+  }
+  const root = document.documentElement;
+  try { const t = localStorage.getItem("theme"); if (t) root.dataset.theme = t; } catch (e) { /* ignore */ }
+  document.getElementById("theme-btn").addEventListener("click", () => {
+    const cur = root.dataset.theme || (matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = cur === "dark" ? "light" : "dark"; root.dataset.theme = next;
+    try { localStorage.setItem("theme", next); } catch (e) { /* ignore */ }
+  });
+  // Reveal the reply progressively (the server still sends it all at once).
+  function typeOut(node, text, done) {
+    if (root.classList.contains("no-motion") || matchMedia("(prefers-reduced-motion: reduce)").matches) { node.innerHTML = md(text); done(); return; }
+    const parts = text.split(/(\s+)/), step = Math.max(2, Math.ceil(parts.length / 70)); let i = 0;
+    (function tick() {
+      i = Math.min(parts.length, i + step);
+      node.innerHTML = md(parts.slice(0, i).join(""));
+      messages.scrollTop = messages.scrollHeight;
+      if (i < parts.length) setTimeout(tick, 22); else done();
+    })();
+  }
+  const toastEl = document.getElementById("toast"); let toastTimer;
+  function toast(msg) { toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastTimer); toastTimer = setTimeout(() => toastEl.classList.remove("show"), 1800); }
+  async function copyText(t) {
+    try { await navigator.clipboard.writeText(t); return true; } catch (e) {
+      const ta = document.createElement("textarea"); ta.value = t; ta.style.cssText = "position:fixed;opacity:0"; document.body.appendChild(ta); ta.select();
+      let ok = false; try { ok = document.execCommand("copy"); } catch (_) { /* ignore */ } ta.remove(); return ok;
+    }
+  }
+  function addActions(msgDiv, raw, calls) {
+    const text = raw.replace(/\*\*/g, "");
+    const row = el("div", "actions");
+    const copy = el("button", null, "Copy"); copy.type = "button";
+    copy.addEventListener("click", async () => toast(await copyText(text) ? "Copied to clipboard" : "Couldn't copy"));
+    const share = el("button", null, "Share"); share.type = "button";
+    share.addEventListener("click", async () => {
+      if (navigator.share) { try { await navigator.share({ title: "Domestique ride plan", text }); } catch (e) { /* cancelled */ } }
+      else toast(await copyText(text) ? "Copied. Paste it to share" : "Couldn't copy");
+    });
+    row.append(copy, share); msgDiv.querySelector(".content").appendChild(row);
+    const used = new Set((calls || []).map(c => c.name)), opts = [];
+    if (!used.has("get_ride_forecast")) opts.push("What's the weather like for this ride?");
+    if (!used.has("find_refuel_stops")) opts.push("Where can I refill water and grab coffee?");
+    if (used.has("plan_route") && !used.has("analyze_headwind")) opts.push("Which direction should I ride to avoid the headwind?");
+    if (!used.has("estimate_ride_effort")) opts.push("How long will it take and how should I fuel?");
+    if (!used.has("recommend_tire_pressure")) opts.push("What tire pressure should I run?");
+    if (opts.length) { const chips = el("div", "chips"); opts.slice(0, 3).forEach(t => { const b = el("button", "chip", t); b.type = "button"; b.addEventListener("click", () => send(t)); chips.appendChild(b); }); msgDiv.appendChild(chips); }
+    messages.scrollTop = messages.scrollHeight;
+  }
+  document.getElementById("menu-btn").addEventListener("click", () => document.body.classList.toggle("menu-open"));
+  document.getElementById("scrim").addEventListener("click", () => document.body.classList.remove("menu-open"));
+  document.addEventListener("keydown", e => { if (e.key === "Escape") document.body.classList.remove("menu-open"); });
+  let metric = false; try { metric = localStorage.getItem("units") === "metric"; } catch (e) { /* ignore */ }
+  const su = () => metric ? "km/h" : "mph", du = () => metric ? "km" : "mi", tu = () => metric ? "°C" : "°F";
+  const sp = v => metric ? Number(v) * 1.609344 : Number(v);
+  const fmtTemp = f => metric ? Math.round((f - 32) * 5 / 9) : Math.round(f);
+  const fmtDist = (mi, d = 1) => metric ? fmt(mi * 1.609344, d) + " km" : fmt(mi, d) + " mi";
+  const fmtElev = ft => metric ? fmt(ft * 0.3048) + " m" : fmt(ft) + " ft";
+  function refreshCards() {
+    document.querySelectorAll(".tool").forEach(card => {
+      const call = card._call; if (!call) return;
+      let p = null; try { p = JSON.parse(call.result); } catch (e) { return; }
+      const nv = p && visualize(call.name, p), old = card.querySelector(".tool-viz");
+      if (nv && old) old.replaceWith(nv);
+    });
+  }
+  const unitsBtn = document.getElementById("units-btn");
+  const syncUnits = () => { unitsBtn.textContent = metric ? "Units: km / meters" : "Units: miles / feet"; };
+  syncUnits();
+  unitsBtn.addEventListener("click", () => { metric = !metric; try { localStorage.setItem("units", metric ? "metric" : "imperial"); } catch (e) { /* ignore */ } syncUnits(); refreshCards(); });
+
+  function greeting() {
+    const h = new Date().getHours();
+    return h < 5 ? "Up before the sun? Where to?" : h < 9 ? "Early start. Where are we riding?" : h < 12 ? "Where are we riding today?" : h < 17 ? "Afternoon spin? Where to?" : h < 21 ? "Evening ride? Where to?" : "Planning a late one? Where to?";
+  }
+  document.getElementById("greeting").textContent = greeting();
+
+  (function buildSeason() {
+    const m = new Date().getMonth(), box = document.getElementById("seasonal");
+    const season = m >= 2 && m <= 4 ? "spring" : m >= 5 && m <= 7 ? "summer" : m >= 8 && m <= 10 ? "autumn" : "winter";
+    box.className = "seasonal " + season; document.getElementById("backdrop").dataset.season = season;
+    for (let i = 0; i < 16; i++) {
+      const p = document.createElement("i");
+      p.style.cssText = `left:${(Math.random() * 100).toFixed(1)}%;--s:${(9 + Math.random() * 9).toFixed(1)}px;--t:${(14 + Math.random() * 16).toFixed(1)}s;--d:-${(Math.random() * 30).toFixed(1)}s;--dx:${(Math.random() * 160 - 80).toFixed(0)}px;--r:${(Math.random() * 540 - 270).toFixed(0)}deg;--y:${(Math.random() * 50).toFixed(0)}`;
+      box.appendChild(p);
+    }
+  })();
+
+  let lastPrompt = "";
+  document.addEventListener("keydown", e => {
+    const typing = /^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName);
+    if (e.key === "/" && !typing && !e.metaKey && !e.ctrlKey) { e.preventDefault(); userInput.focus(); }
+    else if (e.key === "Escape" && document.activeElement === userInput) { userInput.value = ""; userInput.blur(); }
+  });
+  userInput.addEventListener("keydown", e => { if (e.key === "ArrowUp" && !userInput.value && lastPrompt) { e.preventDefault(); userInput.value = lastPrompt; } });
+
+  const motionBtn = document.getElementById("motion-btn");
+  function setMotion(off) {
+    root.classList.toggle("no-motion", off);
+    motionBtn.textContent = off ? "Play animations" : "Stop animations";
+    motionBtn.setAttribute("aria-pressed", off ? "true" : "false");
+    try { localStorage.setItem("motion", off ? "off" : "on"); } catch (e) { /* ignore */ }
+  }
+  let savedMotion = null; try { savedMotion = localStorage.getItem("motion"); } catch (e) { /* ignore */ }
+  setMotion(savedMotion === "off");
+  motionBtn.addEventListener("click", () => setMotion(!root.classList.contains("no-motion")));
+  const heroCards = document.getElementById("hero-cards");
+  SAMPLES.slice(0, 4).forEach(t => { const b = el("button", "hero-card", t); b.type = "button"; b.addEventListener("click", () => send(t)); heroCards.appendChild(b); });
   const samples = document.getElementById("samples");
   SAMPLES.forEach(s => { const b = el("button", "sample", s); b.type = "button"; b.addEventListener("click", () => send(s)); samples.appendChild(b); });
   sendBtn.addEventListener("click", () => send());

@@ -68,7 +68,13 @@ Tests (LiteLLM is mocked, tools run for real): `uv run --with pytest --with http
 
 ## Troubleshooting
 
-**`ZoneInfoNotFoundError` (common on Windows):** run `uv add tzdata`, then restart the server.
+**`ZoneInfoNotFoundError: 'No time zone found with key ...'`** — some systems (commonly Windows,
+and some slim Docker images) don't ship an OS-level timezone database, which is what `plan_route`,
+`get_ride_forecast` and `analyze_headwind` need to convert a place into its local time. Fix:
+
+```bash
+uv add tzdata
+```
 
 ## Deploy
 

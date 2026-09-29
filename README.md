@@ -47,7 +47,7 @@ instead of crashing the loop. `plan_route` returns a `route_id` the other tools 
 chains route -> headwind -> effort -> stops without re-routing.
 
 `get_ride_forecast` and `analyze_headwind` resolve dates and hours in the location's own timezone
-(the `tz_name`/`timezone` value Open-Meteo returns, e.g. `America/New_York`), using Python's
+(the `tz_name`/`timezone` value Open-Meteo returns), using Python's
 `zoneinfo`. See **Run locally** below for a required dependency this pulls in.
 
 ## Frontend

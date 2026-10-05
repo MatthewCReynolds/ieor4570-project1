@@ -9,4 +9,5 @@ dependencies = [
     "litellm>=1.50",
     "google-cloud-aiplatform>=1.40.0",
     "requests>=2.31",
+    "tzdata>=2026.5",
 ]

@@ -13,13 +13,17 @@ Tools
   find_refuel_stops      Water, bike shops, cafes along the route via Overpass. (external API)
   recommend_tire_pressure Berto 15%-drop tire pressure model.   ORIGINAL (rw3024)
   estimate_ride_effort   Physics model: time, speed, kJ, fueling for a route.
+  assess_route_safety    Level-of-Traffic-Stress score from the OSM tags of each road.  ORIGINAL (see route_insights.py)
+  analyze_sun_exposure   Sun position vs. your heading along the route: glare, dark, UV. ORIGINAL (see route_insights.py)
 """
 
 from __future__ import annotations
 
+import inspect
 import json
 import math
 import re
+import time
 import uuid
 from collections import OrderedDict
 from datetime import date, datetime, timedelta
@@ -34,6 +38,7 @@ GEOCODE_URL = "https://geocoding-api.open-meteo.com/v1/search"
 FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 BROUTER_URL = "https://brouter.de/brouter"
 OVERPASS_URL = "https://overpass-api.de/api/interpreter"
+OVERPASS_MIRRORS = [OVERPASS_URL, "https://overpass.kumi.systems/api/interpreter"]
 HEADERS = {"User-Agent": "domestique-ride-planner/1.0 (IEOR 4570 student project)"}
 
 # Routes planned in this process, keyed by route_id, so later tools (headwind, refuel
@@ -58,20 +63,33 @@ def _error(message: str, hint: str | None = None) -> str:
 
 
 def _get_json(url: str, params: dict | None = None, timeout: int = 12, what: str = "service"):
-    try:
-        r = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
-    except requests.Timeout:
-        raise ToolError(f"{what} timed out after {timeout}s.", "Try again once, or simplify the request.")
-    except requests.RequestException as e:
-        raise ToolError(f"{what} request failed: {e}", "Try again; if it keeps failing tell the rider the service is down.")
-    if r.status_code == 429:
-        raise ToolError(f"{what} is rate limiting us (HTTP 429).", "Wait a moment and retry, or ask for a smaller area.")
-    if r.status_code >= 400:
-        raise ToolError(f"{what} returned HTTP {r.status_code}: {r.text[:200]}", "Check the arguments and retry.")
-    try:
-        return r.json()
-    except ValueError:
-        raise ToolError(f"{what} returned something that is not JSON: {r.text[:200]}")
+    attempts = 2 if timeout <= 20 else 1          # long routing calls are not retried
+    last: ToolError | None = None
+    for attempt in range(attempts):
+        try:
+            r = requests.get(url, params=params, headers=HEADERS, timeout=timeout)
+        except requests.Timeout:
+            last = ToolError(f"{what} timed out after {timeout}s.", "Try again once, or simplify the request.")
+        except requests.RequestException as e:
+            last = ToolError(f"{what} request failed: {e}", "Try again; if it keeps failing tell the rider the service is down.")
+        else:
+            if r.status_code == 429:
+                last = ToolError(f"{what} is rate limiting us (HTTP 429).", "Wait a moment and retry, or ask for a smaller area.")
+            elif r.status_code >= 500:
+                last = ToolError(f"{what} had a server error (HTTP {r.status_code}).",
+                                 "Try again once; if it fails again tell the rider the service is down.")
+            elif r.status_code >= 400:         # a client error will not improve on retry
+                hint = ("BRouter answers 400 when a point is not near a rideable road. Try a nearby town or landmark, or style='mixed'."
+                        if "brouter" in url else "Check the arguments and retry.")
+                raise ToolError(f"{what} returned HTTP {r.status_code}: {r.text[:200]}", hint)
+            else:
+                try:
+                    return r.json()
+                except ValueError:
+                    raise ToolError(f"{what} returned something that is not JSON: {r.text[:200]}", "Try again once.")
+        if attempt + 1 < attempts:
+            time.sleep(1.0)
+    raise last
 
 
 # --- Geography helpers ---
@@ -104,8 +122,21 @@ def _compass(deg: float) -> str:
 
 _LATLON = re.compile(r"^\s*(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)\s*$")
 
+# The same place is looked up by several tools in one conversation; Nominatim asks for ~1 request/second.
+_GEOCODE_CACHE: dict[str, dict] = {}
+
 
 def _geocode(place: str) -> dict:
+    key = str(place or "").strip().lower()
+    if key in _GEOCODE_CACHE:
+        return _GEOCODE_CACHE[key]
+    result = _geocode_uncached(place)
+    if key:
+        _GEOCODE_CACHE[key] = result
+    return result
+
+
+def _geocode_uncached(place: str) -> dict:
     """Turn a place name (or 'lat,lon') into {name, lat, lon}. Nominatim handles landmarks
     and addresses; Open-Meteo's geocoder is the fallback for plain city names."""
     if not place or not str(place).strip():
@@ -262,6 +293,8 @@ def get_ride_forecast(location: str | None = None, date: str | None = None, star
         duration_hours = float(duration_hours or 2)
     except (TypeError, ValueError):
         return _error("duration_hours must be a number of hours, e.g. 2.5")
+    if not 0.25 <= duration_hours <= 24:
+        return _error("duration_hours must be between 0.25 and 24.", "Give the ride length in hours, e.g. 2.5.")
     n_hours = max(1, int(math.ceil(duration_hours)))
 
     rows = [_hour_row(fc, i) for i in idx]
@@ -428,17 +461,23 @@ def plan_route(start: str, end: str, style: str = "road", via: str | None = None
         return _error(str(e))
 
     # Surface / road-type breakdown from BRouter's per-way messages (distance weighted).
-    surface_m, kind_m = {"paved": 0.0, "unpaved": 0.0, "unknown": 0.0}, {}
+    # Each way's tags are also kept (compact_way) so assess_route_safety can score the road later.
+    surface_m, kind_m, ways = {"paved": 0.0, "unpaved": 0.0, "unknown": 0.0}, {}, []
     msgs = props.get("messages") or []
     if len(msgs) > 1:
         head = msgs[0]
         try:
             di, ti = head.index("Distance"), head.index("WayTags")
+            ni = head.index("NodeTags") if "NodeTags" in head else None
+            running = 0.0
             for row in msgs[1:]:
                 dist = float(row[di] or 0)
                 s, k = _classify_surface(row[ti] or "")
                 surface_m[s] += dist
                 kind_m[k] = kind_m.get(k, 0.0) + dist
+                node_tags = (row[ni] if ni is not None else "") or ""
+                ways.append({"start_m": running, "dist_m": dist, "tags": compact_way(row[ti] or "", node_tags)})
+                running += dist
         except (ValueError, IndexError):
             pass
     known = surface_m["paved"] + surface_m["unpaved"] + surface_m["unknown"]
@@ -448,7 +487,7 @@ def plan_route(start: str, end: str, style: str = "road", via: str | None = None
     route_id = uuid.uuid4().hex[:8]
     route = {
         "route_id": route_id, "start": a, "end": b, "via": stops[1:-1], "style": style_key, "profile": profile,
-        "coords": coords, "segments": segments, "elevation_profile": profile_pts,
+        "coords": coords, "segments": segments, "ways": ways, "elevation_profile": profile_pts,
         "distance_m": total_m, "ascent_m": ascent_m, "descent_m": descent_m,
         "brouter_time_s": float(props.get("total-time") or 0),
         "surface_pct": {k: round(100 * v / known) for k, v in surface_m.items()} if known else {},
@@ -681,20 +720,27 @@ def find_refuel_stops(route_id: str | None = None, location: str | None = None, 
 
     union = "".join(f"nwr{STOP_KINDS[k][0]}({area});" for k in kinds)
     query = f"[out:json][timeout:25];({union});out center tags 80;"
-    try:
-        r = requests.post(OVERPASS_URL, data={"data": query}, headers=HEADERS, timeout=35)
-    except requests.RequestException as e:
-        return _error(f"Overpass (OpenStreetMap) request failed: {e}", "Retry once; if it fails again tell the rider to check the map manually.")
-    if r.status_code == 429 or r.status_code == 504:
+    r, err = None, None
+    for url in OVERPASS_MIRRORS:
+        try:
+            r = requests.post(url, data={"data": query}, headers=HEADERS, timeout=35)
+        except requests.RequestException as e:
+            r, err = None, e
+            continue
+        if r.status_code in (429, 502, 503, 504):
+            continue                       # busy: try the next server
+        break
+    if r is None:
+        return _error(f"Overpass (OpenStreetMap) request failed: {err}", "Retry once; if it fails again tell the rider to check the map manually.")
+    if r.status_code in (429, 502, 503, 504):
         return _error(f"Overpass is busy (HTTP {r.status_code}).", "Wait a few seconds and retry, or narrow kinds/corridor.")
     if r.status_code >= 400:
-        return _error(f"Overpass returned HTTP {r.status_code}: {r.text[:200]}")
+        return _error(f"Overpass returned HTTP {r.status_code}: {r.text[:200]}", "Check the arguments and retry.")
     try:
         elements = r.json().get("elements", [])
     except ValueError:
         return _error("Overpass returned non-JSON output.", "Retry once.")
 
-    tag_to_kind = {STOP_KINDS[k][0]: k for k in kinds}
     stops = []
     for el in elements:
         tags = el.get("tags", {})
@@ -839,18 +885,24 @@ def estimate_ride_effort(route_id: str | None = None, distance_mi: float | None 
             surface = "mixed"
     else:
         if distance_mi is None:
-            return _error("Need a route_id or a distance_mi (and ascent_ft).")
+            return _error("Need a route_id or a distance_mi (and ascent_ft).", "Plan the route first, or pass distance_mi in miles.")
         try:
             dist_m = float(distance_mi) * 1609.344
             ascent_m = float(ascent_ft or 0) / 3.28084
         except (TypeError, ValueError):
             return _error("distance_mi and ascent_ft must be numbers.")
-        # Synthetic profile: climbs at 5%, matching descents, flat for the rest.
-        climb_m = ascent_m / 0.05
-        flat_m = max(0.0, dist_m - 2 * climb_m)
-        segments = [{"dist_m": climb_m, "grade_pct": 5.0}, {"dist_m": flat_m, "grade_pct": 0.0}, {"dist_m": climb_m, "grade_pct": -5.0}]
+        if dist_m <= 0:
+            return _error("distance_mi must be greater than 0.", "Give the ride length in miles, e.g. 25.")
+        # Synthetic profile: climbs at 5% or steeper (never more than 45% of the ride), matching descents, flat for the rest.
+        climb_m = min(ascent_m / 0.05, 0.45 * dist_m) if ascent_m > 0 else 0.0
+        grade = 100.0 * ascent_m / climb_m if climb_m else 0.0
+        if grade > 20:
+            return _error(f"{ascent_ft} ft of climbing in {distance_mi} mi averages over 20% on the climbs, which looks like a typo.",
+                          "Check the numbers (feet vs meters?) or plan the route and pass its route_id.")
+        flat_m = dist_m - 2 * climb_m
+        segments = [{"dist_m": climb_m, "grade_pct": grade}, {"dist_m": flat_m, "grade_pct": 0.0}, {"dist_m": climb_m, "grade_pct": -grade}]
         segments = [s for s in segments if s["dist_m"] > 0]
-        source = "distance + climbing (synthetic 5% climbs)"
+        source = f"distance + climbing (synthetic {grade:.0f}% climbs)"
 
     t = _ride_time_s(segments, power, mass, CRR[surface], [headwind_ms] * len(segments))
     hours = t / 3600
@@ -881,7 +933,8 @@ TOOLS = [
         "name": "get_ride_forecast",
         "description": ("Hourly cycling forecast for a place and day: temperature, feels-like, rain chance, wind speed/gusts/direction, "
                         "sunrise/sunset, and a 0-100 ride score per hour. Also returns the best start window of the day. "
-                        "Call this for any question about whether/when to ride, weather, wind, rain, or daylight."),
+                        "Call this for any question about whether/when to ride, weather, wind, rain, or daylight. "
+                        "Does not know which way you are riding; for headwind on a specific route use analyze_headwind."),
         "parameters": {"type": "object", "properties": {
             "location": {"type": "string", "description": "City, town or landmark, e.g. 'Nyack, NY' or 'Central Park'. Omit if you pass route_id."},
             "route_id": {"type": "string", "description": "Optional. A route_id from plan_route; the forecast is taken at the route's start."},
@@ -908,7 +961,9 @@ TOOLS = [
         "description": ("ORIGINAL. Cross the route's direction of travel, mile by mile, with the hourly wind forecast at the start, middle and end "
                         "of the route at the time the rider will be there. Returns headwind/tailwind/crosswind exposure, the worst mile, "
                         "the minutes the wind costs, the time if ridden in reverse, and whether reversing the loop is better. "
-                        "Requires a route_id from plan_route. Use for 'which direction should I ride', 'how bad is the wind', 'when is the wind lightest'."),
+                        "Requires a route_id from plan_route. Use for 'which direction should I ride', 'how bad is the wind', 'when is the wind lightest'. "
+                        "'Reversed' means riding the same path from the end back to the start (for a loop, the opposite direction). "
+                        "For rain or temperature use get_ride_forecast."),
         "parameters": {"type": "object", "properties": {
             "route_id": {"type": "string", "description": "The route_id returned by plan_route."},
             "date": {"type": "string", "description": "'today' (default), 'tomorrow', a weekday name, or YYYY-MM-DD."},
@@ -921,7 +976,8 @@ TOOLS = [
         "name": "find_refuel_stops",
         "description": ("Find drinking-water fountains, bike shops, public repair stands, cafes, convenience stores and restrooms along a planned "
                         "route (within a corridor) or near a place, from OpenStreetMap via Overpass. Results carry the mile marker along the route. "
-                        "Use for 'where can I refill', 'is there a bike shop on the way', 'coffee stop'."),
+                        "Use for 'where can I refill', 'is there a bike shop on the way', 'coffee stop'. "
+                        "Not for route safety (use assess_route_safety)."),
         "parameters": {"type": "object", "properties": {
             "route_id": {"type": "string", "description": "A route_id from plan_route. Searches a corridor along the whole route."},
             "location": {"type": "string", "description": "Alternative to route_id: a place to search around (1.5 km radius)."},
@@ -981,11 +1037,21 @@ def run_tool(name: str, args: dict) -> str:
     """Run one tool call. Models invent tool names and arguments; never let that crash the loop."""
     if name not in TOOL_MAP:
         return _error(f"Unknown tool '{name}'.", f"Available tools: {list(TOOL_MAP)}.")
+    fn = TOOL_MAP[name]
     try:
-        return TOOL_MAP[name](**args)
+        inspect.signature(fn).bind(**args)       # only argument mistakes are reported as "bad arguments"
     except TypeError as e:
         return _error(f"Bad arguments for {name}: {e}", "Check the parameter names against the tool description and retry.")
+    try:
+        return fn(**args)
     except ToolError as e:
         return _error(str(e), e.hint)
     except Exception as e:  # a bug in a tool should reach the model as text, not kill the request
         return _error(f"{name} failed unexpectedly: {type(e).__name__}: {str(e)[:200]}", "Try once more or answer without this tool.")
+
+
+# Must stay at the very bottom: route_insights imports names defined above.
+from route_insights import EXTRA_TOOLS, EXTRA_TOOL_MAP, compact_way  # noqa: E402
+
+TOOLS += EXTRA_TOOLS
+TOOL_MAP.update(EXTRA_TOOL_MAP)

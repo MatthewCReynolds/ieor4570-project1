@@ -9,12 +9,12 @@ Design rules (from the lecture on tool writing):
 Tools
   get_ride_forecast      Open-Meteo hourly forecast, scored for cycling.        (external API)
   plan_route             BRouter bike routing + OSM surface breakdown.          (external API)
-  analyze_headwind       Wind vs. route bearing, hour by hour. ORIGINAL (mcr2235)
+  analyze_headwind       Wind vs. route bearing, hour by hour. ORIGINAL -- (mcr2235)
   find_refuel_stops      Water, bike shops, cafes along the route via Overpass. (external API)
-  recommend_tire_pressure Berto 15%-drop tire pressure model.   ORIGINAL (rw3024)
+  recommend_tire_pressure Berto 15%-drop tire pressure model.   ORIGINAL -- (mcr2235)
   estimate_ride_effort   Physics model: time, speed, kJ, fueling for a route.
-  assess_route_safety    Level-of-Traffic-Stress score from the OSM tags of each road.  ORIGINAL (see route_insights.py)
-  analyze_sun_exposure   Sun position vs. your heading along the route: glare, dark, UV. ORIGINAL (see route_insights.py)
+  assess_route_safety    Level-of-Traffic-Stress score from the OSM tags of each road.  ORIGINAL (see route_insights.py) -- (rw3024)
+  analyze_sun_exposure   Sun position vs. your heading along the route: glare, dark, UV. ORIGINAL (see route_insights.py) -- (rw3024)
 """
 
 from __future__ import annotations

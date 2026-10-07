@@ -8,7 +8,7 @@ ENV UV_COMPILE_BYTECODE=1 UV_LINK_MODE=copy PYTHONUNBUFFERED=1
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-install-project --no-dev
 
-COPY app.py tools.py index.html ./
+COPY app.py tools.py route_insights.py index.html ./
 
 ENV HOST=0.0.0.0 PORT=8080
 EXPOSE 8080

@@ -7,8 +7,8 @@ Same rules as tools.py: every tool returns a JSON string, failures come back as
 {"error": ..., "hint": ...} instead of raising, and the descriptions in EXTRA_TOOLS tell the
 model when to call each tool and what every argument means.
 
-Import order matters: tools.py imports this module at its very bottom (after everything here
-depends on is defined), so always import `tools`, never `route_insights`, first.
+Importing this module registers both tools into tools.TOOLS and tools.TOOL_MAP (see the bottom of
+the file). app.py imports it; tools.py does not import it, so there is no import cycle.
 """
 
 from __future__ import annotations
@@ -20,7 +20,8 @@ import re
 from datetime import datetime, timedelta, timezone
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
-from tools import (CRR, FORECAST_URL, ROUTES, ToolError, _bearing_deg, _compass, _error, _get_json,
+import tools
+from tools import (CRR, FORECAST_URL, ROUTES, ToolError, _compass, _error, _get_json,
                    _haversine_m, _resolve_date, _speed_for_power, _to_kg)
 
 # --------------------------------------------------------------------------------------
@@ -66,13 +67,7 @@ LTS_WEIGHT = {1: 100, 2: 75, 3: 40, 4: 0}
 SHORT_CROSSING_M = 150
 
 
-def compact_way(way_tags: str, node_tags: str = "") -> dict:
-    """Keep only the OSM tags the safety model uses (plan_route stores one of these per way)."""
-    tags = dict(t.split("=", 1) for t in (way_tags or "").split() if "=" in t)
-    out = {k: tags[k] for k in KEEP_TAGS if k in tags}
-    if "traffic_signals" in (node_tags or ""):
-        out["signals"] = 1
-    return out
+compact_way = tools._compact_way   # plan_route stores one of these per way; kept here for reference
 
 
 def _parse_speed_mph(value: str | None) -> float | None:
@@ -477,3 +472,10 @@ EXTRA_TOOL_MAP = {
     "assess_route_safety": assess_route_safety,
     "analyze_sun_exposure": analyze_sun_exposure,
 }
+
+
+# Register with the harness. Idempotent so re-imports (tests, reloads) do not duplicate tools.
+for _t in EXTRA_TOOLS:
+    if all(x["function"]["name"] != _t["function"]["name"] for x in tools.TOOLS):
+        tools.TOOLS.append(_t)
+tools.TOOL_MAP.update(EXTRA_TOOL_MAP)

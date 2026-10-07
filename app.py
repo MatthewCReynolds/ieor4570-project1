@@ -22,6 +22,7 @@ from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse, Response
 from pydantic import BaseModel
 
+import route_insights  # noqa: F401  (registers assess_route_safety and analyze_sun_exposure into TOOLS)
 from tools import ROUTES, TOOLS, run_tool
 
 # --- Config ---

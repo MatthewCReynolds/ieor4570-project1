@@ -15,6 +15,8 @@ Tools
   estimate_ride_effort   Physics model: time, speed, kJ, fueling for a route.
   assess_route_safety    Level-of-Traffic-Stress score from the OSM tags of each road.  ORIGINAL (see route_insights.py) -- (rw3024)
   analyze_sun_exposure   Sun position vs. your heading along the route: glare, dark, UV. ORIGINAL (see route_insights.py) -- (rw3024)
+
+The last two live in route_insights.py, which appends itself to TOOLS / TOOL_MAP when imported (app.py does).
 """
 
 from __future__ import annotations
@@ -378,6 +380,19 @@ def _classify_surface(way_tags: str) -> tuple[str, str]:
     return s, k
 
 
+# OSM tags kept per way for assess_route_safety (route_insights.py). Stored compact to keep routes small.
+WAY_TAGS_KEPT = ("highway", "maxspeed", "cycleway", "cycleway:left", "cycleway:right", "cycleway:both",
+                 "bicycle", "lit", "surface")
+
+
+def _compact_way(way_tags: str, node_tags: str = "") -> dict:
+    tags = dict(t.split("=", 1) for t in (way_tags or "").split() if "=" in t)
+    out = {k: tags[k] for k in WAY_TAGS_KEPT if k in tags}
+    if "traffic_signals" in (node_tags or ""):
+        out["signals"] = 1
+    return out
+
+
 def _build_segments(coords: list, target_m: float = 800.0) -> tuple[list, list, float, float, float]:
     """Walk the polyline. Returns (segments, profile, total_m, ascent_m, descent_m).
     Each segment: {km, dist_m, bearing, grade_pct}. Profile: [[km, elev_m], ...] ~60 points."""
@@ -476,7 +491,7 @@ def plan_route(start: str, end: str, style: str = "road", via: str | None = None
                 surface_m[s] += dist
                 kind_m[k] = kind_m.get(k, 0.0) + dist
                 node_tags = (row[ni] if ni is not None else "") or ""
-                ways.append({"start_m": running, "dist_m": dist, "tags": compact_way(row[ti] or "", node_tags)})
+                ways.append({"start_m": running, "dist_m": dist, "tags": _compact_way(row[ti] or "", node_tags)})
                 running += dist
         except (ValueError, IndexError):
             pass
@@ -1050,8 +1065,3 @@ def run_tool(name: str, args: dict) -> str:
         return _error(f"{name} failed unexpectedly: {type(e).__name__}: {str(e)[:200]}", "Try once more or answer without this tool.")
 
 
-# Must stay at the very bottom: route_insights imports names defined above.
-from route_insights import EXTRA_TOOLS, EXTRA_TOOL_MAP, compact_way  # noqa: E402
-
-TOOLS += EXTRA_TOOLS
-TOOL_MAP.update(EXTRA_TOOL_MAP)

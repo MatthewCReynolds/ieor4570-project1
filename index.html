@@ -14,6 +14,7 @@
     --tool: #eef3ec; --tool-line: #dbe4d8; --ok: #2f7d4f; --warn: #d97706; --bad: #dc2626;
     --chart-elev: #2f6b4f; --chart-elev-fill: rgba(47,107,79,.14); --chart-head: #c2410c; --chart-tail: #0e7490; --chart-zero: #9aa89e;
     --user: #14342a; --user-ink: #ffffff; --radius: 12px;
+    --stress-1: #fde3c8; --stress-2: #f5b483; --stress-3: #e07b3a; --stress-4: #9a3412;
     --font-body: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
     --font-display: "Bricolage Grotesque", "DM Sans", system-ui, sans-serif;
     --font-mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
@@ -26,7 +27,7 @@
       --bg: #0d1512; --sky: #101c17; --panel: #131d18; --ink: #e6efe9; --ink-2: #a3b3a9; --ink-3: #6b7c72;
       --line: #1f2d26; --accent: #5fb388; --accent-ink: #0d1512; --accent-soft: #163224; --tool: #17231d; --tool-line: #1f2d26;
       --chart-elev: #6fcf9b; --chart-elev-fill: rgba(111,207,155,.15); --chart-head: #fb923c; --chart-tail: #22d3ee; --chart-zero: #4b5a51;
-      --user: #e6efe9; --user-ink: #0d1512; --shadow: none; --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%232a5039'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%232a5039'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%232a5039'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%232a5039'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%232a5039'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%232a5039'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); color-scheme: dark;
+      --user: #e6efe9; --user-ink: #0d1512; --shadow: none; --stress-1: #4a2e1a; --stress-2: #8a4a22; --stress-3: #d9742f; --stress-4: #ffb27a; --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%232a5039'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%232a5039'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%232a5039'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%232a5039'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%232a5039'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%232a5039'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); color-scheme: dark;
       --cloud: rgba(200,230,215,.10);
     }
   }
@@ -34,7 +35,7 @@
       --bg: #0d1512; --sky: #101c17; --panel: #131d18; --ink: #e6efe9; --ink-2: #a3b3a9; --ink-3: #6b7c72;
       --line: #1f2d26; --accent: #5fb388; --accent-ink: #0d1512; --accent-soft: #163224; --tool: #17231d; --tool-line: #1f2d26;
       --chart-elev: #6fcf9b; --chart-elev-fill: rgba(111,207,155,.15); --chart-head: #fb923c; --chart-tail: #22d3ee; --chart-zero: #4b5a51;
-      --user: #e6efe9; --user-ink: #0d1512; --shadow: none; --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%232a5039'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%232a5039'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%232a5039'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%232a5039'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%232a5039'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%232a5039'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); color-scheme: dark;
+      --user: #e6efe9; --user-ink: #0d1512; --shadow: none; --stress-1: #4a2e1a; --stress-2: #8a4a22; --stress-3: #d9742f; --stress-4: #ffb27a; --scene: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 260'%3E%3Cpath d='M0 200 C200 120 380 150 560 170 S900 110 1200 150 V260 H0Z' fill='%2316261e'/%3E%3Cpath d='M0 225 C240 170 460 215 700 195 S1030 165 1200 200 V260 H0Z' fill='%231b3226'/%3E%3Cpolygon points='90%2C196 81%2C222 99%2C222' fill='%232a5039'/%3E%3Cpolygon points='90%2C206 79%2C236 101%2C236' fill='%232a5039'/%3E%3Cpolygon points='120%2C204 111%2C230 129%2C230' fill='%232a5039'/%3E%3Cpolygon points='120%2C214 109%2C244 131%2C244' fill='%232a5039'/%3E%3Cpolygon points='300%2C186 291%2C212 309%2C212' fill='%232a5039'/%3E%3Cpolygon points='300%2C196 289%2C226 311%2C226' fill='%232a5039'/%3E%3Cpolygon points='760%2C180 751%2C206 769%2C206' fill='%232a5039'/%3E%3Cpolygon points='760%2C190 749%2C220 771%2C220' fill='%232a5039'/%3E%3Cpolygon points='790%2C188 781%2C214 799%2C214' fill='%232a5039'/%3E%3Cpolygon points='790%2C198 779%2C228 801%2C228' fill='%232a5039'/%3E%3Cpolygon points='1120%2C168 1111%2C194 1129%2C194' fill='%232a5039'/%3E%3Cpolygon points='1120%2C178 1109%2C208 1131%2C208' fill='%232a5039'/%3E%3Cpath d='M0 245 C300 225 700 250 1200 232 V260 H0Z' fill='%2321402f'/%3E%3Cpath d='M0 250 C300 238 700 254 1200 240' fill='none' stroke='%232f4a3b' stroke-width='3' stroke-dasharray='14 12' stroke-linecap='round'/%3E%3C/svg%3E"); color-scheme: dark;
       --cloud: rgba(200,230,215,.10);
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -103,6 +104,12 @@
   .links a { font-size: .76rem; color: var(--accent); text-decoration: none; border: 1px solid var(--accent); padding: .3rem .6rem; border-radius: 7px; }
   .links a:hover { background: var(--accent-soft); }
   .table-wrap { overflow-x: auto; margin-top: .4rem; }
+  .stress { margin: .6rem 0 .2rem; }
+  .stress-bar { display: flex; gap: 2px; height: 12px; border-radius: 6px; overflow: hidden; background: var(--line); }
+  .stress-bar i { display: block; height: 100%; }
+  .stress-key { display: flex; flex-wrap: wrap; gap: .3rem .9rem; margin-top: .35rem; font-size: .72rem; color: var(--ink-2); }
+  .stress-key i { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: .3rem; vertical-align: -1px; }
+  .fineprint { font-size: .7rem; color: var(--ink-3); margin-top: .3rem; }
   table.stops { border-collapse: collapse; width: 100%; font-size: .78rem; }
   table.stops td:nth-child(3) { min-width: 9rem; }
   table.stops th, table.stops td { text-align: left; padding: .25rem .4rem; border-bottom: 1px solid var(--tool-line); }
@@ -451,6 +458,8 @@
         <li><code>find_refuel_stops</code> water, shops, cafes along the route</li>
         <li><code>recommend_tire_pressure</code> Berto 15%-drop model <span class="orig">original</span></li>
         <li><code>estimate_ride_effort</code> physics: time, kJ, fueling</li>
+        <li><code>assess_route_safety</code> traffic-stress score per road <span class="orig">original</span></li>
+        <li><code>analyze_sun_exposure</code> glare, dark, UV along your heading <span class="orig">original</span></li>
       </ul>
     </div>
     <div class="foot">
@@ -485,6 +494,7 @@
     "Which direction should I ride a loop from Boulder, CO via Lyons, CO on Saturday at 9am to avoid the headwind?",
     "What tire pressure for a 170 lb rider on 32 mm tubeless tires for gravel?",
     "Where can I refill water and grab coffee on that route?",
+    "Is the Columbia to Nyack ride safe for a nervous rider, and will I be riding into the sun if I leave at 5pm?",
   ];
   const messages = document.getElementById("messages");
   const userInput = document.getElementById("user-input");
@@ -597,6 +607,42 @@
     return wrap;
   }
 
+  // Ordinal stacked bar: four stress levels in one warm hue, light to dark; labels carry the identity.
+  const STRESS_LEVELS = [["protected_or_path", "path / protected"], ["calm_street_or_lane", "calm street / lane"], ["moderate_stress", "moderate"], ["high_stress", "high stress"]];
+  const STRESS_COLORS = ["var(--stress-1)", "var(--stress-2)", "var(--stress-3)", "var(--stress-4)"];
+  function stressBar(p) {
+    const wrap = el("div", "stress");
+    const bar = el("div", "stress-bar");
+    STRESS_LEVELS.forEach(([key], i) => { const v = p[key] || 0; if (!v) return; const seg = el("i"); seg.style.width = v + "%"; seg.style.background = STRESS_COLORS[i]; seg.title = `${STRESS_LEVELS[i][1]}: ${v}%`; bar.appendChild(seg); });
+    wrap.appendChild(bar);
+    const key = el("div", "stress-key");
+    STRESS_LEVELS.forEach(([k, label], i) => { const item = el("span"); const sw = el("i"); sw.style.background = STRESS_COLORS[i]; item.appendChild(sw); item.appendChild(document.createTextNode(`${label} ${p[k] || 0}%`)); key.appendChild(item); });
+    wrap.appendChild(key);
+    return wrap;
+  }
+  // The sun's path over the day with the ride window shaded; glare stretches marked on the baseline.
+  function sunArc(r) {
+    const toMin = t => { const m = /^(\d{1,2}):(\d{2})/.exec(t || ""); return m ? +m[1] * 60 + +m[2] : null; };
+    const rise = toMin(r.sunrise), set = toMin(r.sunset), start = toMin(r.start_time);
+    if (rise == null || set == null || start == null) return el("div");
+    const W = 640, H = 110, L = 16, R = 16, base = 84;
+    const { wrap, svg, tip } = chartFrame("Sun over the day (local time); shaded = your ride", W, H);
+    const x = m => L + (m / 1440) * (W - L - R);
+    const arcY = m => { const f = (m - rise) / Math.max(1, set - rise); return f < 0 || f > 1 ? base : base - 62 * Math.sin(Math.PI * f); };
+    const finish = start + (r.ride_minutes || 0);
+    svg.appendChild(svgEl("rect", { x: x(start), y: 10, width: Math.max(2, x(Math.min(1440, finish)) - x(start)), height: base - 10, fill: "var(--accent-soft)", rx: 3 }));
+    svg.appendChild(svgEl("line", { x1: L, x2: W - R, y1: base, y2: base, stroke: "var(--tool-line)" }));
+    let d = ""; for (let m = rise; m <= set; m += 10) d += (d ? " L" : "M") + x(m).toFixed(1) + " " + arcY(m).toFixed(1);
+    svg.appendChild(svgEl("path", { d, fill: "none", stroke: "var(--chart-head)", "stroke-width": 2 }));
+    [[rise, r.sunrise], [set, r.sunset]].forEach(([m, label]) => { const t = svgEl("text", { x: x(m), y: base + 16, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = label; svg.appendChild(t); });
+    const sMid = (start + Math.min(finish, 1440)) / 2;
+    const sun = svgEl("circle", { cx: x(Math.min(Math.max(start, rise), set)), cy: arcY(Math.min(Math.max(start, rise), set)), r: 6, fill: "var(--chart-head)", stroke: "var(--panel)", "stroke-width": 2 });
+    svg.appendChild(sun);
+    const t = svgEl("text", { x: x(sMid), y: 24, "text-anchor": "middle", "font-size": 11, fill: ink() }); t.textContent = `${r.start_time} → ${r.estimated_finish}`; svg.appendChild(t);
+    ((r.glare || {}).stretches || []).forEach(g => { const m = toMin(g.reached_at); if (m == null) return; const mk = svgEl("rect", { x: x(m) - 3, y: base - 4, width: 6, height: 8, fill: "var(--bad)", rx: 1 }); mk.addEventListener("mouseenter", () => { tip.style.display = "block"; tip.style.left = (x(m) / W * 100) + "%"; tip.style.top = ((base - 6) / H * 100) + "%"; tip.textContent = `glare ${g.reached_at} · ${fmtDist(g.from_mi)}–${fmtDist(g.to_mi)} heading ${g.heading}, sun in the ${g.sun_in_the}`; }); mk.addEventListener("mouseleave", () => tip.style.display = "none"); svg.appendChild(mk); });
+    return wrap;
+  }
+
   function forecastStrip(hours) {
     const strip = el("div", "hours");
     hours.forEach(h => {
@@ -663,6 +709,40 @@
     } else if (name === "estimate_ride_effort") {
       box.appendChild(kpis([[r.moving_time_hm, "moving time"], [fmt(sp(r.avg_speed_mph), 1) + " " + su(), "avg speed"], [fmt(r.work_kj) + " kJ", "work"], [fmt(r.calories_kcal), "kcal"], [r.fueling.bottles_needed, "bottles"], [r.assumed_power_w + " W", "assumed power"]]));
       box.appendChild(el("div", null, "Fuel: " + r.fueling.carbs));
+    } else if (name === "assess_route_safety") {
+      const p = r.pct_by_stress || {}, flagged = r.flagged_stretches || [];
+      box.appendChild(kpis([[r.comfort_score, "comfort score (0-100)"], [r.verdict || "–", "verdict"], [(p.high_stress ?? 0) + "%", "high stress"],
+        [fmt(r.signals_per_mile, 1), "signals / " + du()], [flagged.length + (r.more_flagged_stretches ? "+" : ""), "flagged stretches"]]));
+      box.appendChild(stressBar(p));
+      if (flagged.length) {
+        const t = el("table", "stops"); const hd = t.createTHead().insertRow();
+        ["From", "To", "Road", "Stress", "Speed"].forEach(h => hd.appendChild(el("th", null, h)));
+        const body = t.createTBody();
+        flagged.forEach(f => { const row = body.insertRow(); [fmtDist(f.from_mi), fmtDist(f.to_mi), f.road + " · " + f.kind, (f.stress || "").replace(/_/g, " "),
+          f.speed_mph == null ? "–" : fmt(sp(f.speed_mph)) + " " + su() + (f.speed_source === "posted" ? "" : "*")].forEach(v => row.insertCell().textContent = v); });
+        const w = el("div", "table-wrap"); w.appendChild(t); box.appendChild(w);
+        box.appendChild(el("div", "fineprint", "* speed assumed from road class (no posted limit in OpenStreetMap)"));
+      }
+      if (r.suggestion) box.appendChild(el("div", null, "→ " + r.suggestion));
+    } else if (name === "analyze_sun_exposure") {
+      const d = r.daylight || {}, g = r.glare || {}, uv = r.uv;
+      const k = [[(r.sunrise || "–") + " / " + (r.sunset || "–"), "sunrise / sunset"], [r.start_time + " → " + r.estimated_finish, "start → finish"],
+        [(g.pct_distance ?? 0) + "% · " + (g.minutes ?? 0) + " min", "sun in your eyes"],
+        [d.finishes_after_sunset ? (d.minutes_after_sunset + " min after dark") : "no", "finish after sunset?"]];
+      if (d.lights_needed_minutes) k.push([d.lights_needed_minutes + " min", "lights needed"]);
+      if (d.latest_start_to_finish_by_sunset) k.push([d.latest_start_to_finish_by_sunset, "latest start by sunset"]);
+      if (uv) k.push(["UV " + uv.max_uv_index, (uv.advice || "").split(":")[0]]);
+      if (r.better_start) k.push([r.better_start.start, "less glare if you start at"]);
+      box.appendChild(kpis(k));
+      box.appendChild(sunArc(r));
+      if (g.stretches && g.stretches.length) {
+        const t = el("table", "stops"); const hd = t.createTHead().insertRow();
+        ["From", "To", "At", "Heading", "Sun in the"].forEach(h => hd.appendChild(el("th", null, h)));
+        const body = t.createTBody();
+        g.stretches.forEach(x => { const row = body.insertRow(); [fmtDist(x.from_mi), fmtDist(x.to_mi), x.reached_at, x.heading, x.sun_in_the + " (" + x.sun_elevation_deg + "°)"].forEach(v => row.insertCell().textContent = v); });
+        const w = el("div", "table-wrap"); w.appendChild(t); box.appendChild(w);
+      }
+      if (uv && uv.advice) box.appendChild(el("div", null, "Sun protection: " + uv.advice));
     } else {
       return null;
     }
@@ -735,6 +815,8 @@
     find_refuel_stops: '<path d="M5 9h11v5a5 5 0 01-5 5h-1a5 5 0 01-5-5zM16 10h2a2.5 2.5 0 010 5h-2M8 3v3M12 3v3"/>',
     recommend_tire_pressure: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3.5"/><path d="M12 3v5.5M12 15.5V21M3 12h5.5M15.5 12H21"/>',
     estimate_ride_effort: '<path d="M13 2L5 14h6l-1 8 8-12h-6z"/>',
+    assess_route_safety: '<path d="M12 3l7 3v5c0 5-3.5 8.5-7 10-3.5-1.5-7-5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+    analyze_sun_exposure: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
   };
   // Backdrop reacts to the forecast: sky tint by time, clouds drift with the wind, rain if likely.
   function applyWeather(r) {
@@ -809,6 +891,8 @@
     if (!used.has("find_refuel_stops")) opts.push("Where can I refill water and grab coffee?");
     if (used.has("plan_route") && !used.has("analyze_headwind")) opts.push("Which direction should I ride to avoid the headwind?");
     if (!used.has("estimate_ride_effort")) opts.push("How long will it take and how should I fuel?");
+    if (used.has("plan_route") && !used.has("assess_route_safety")) opts.push("Is this route safe for a nervous rider?");
+    if (used.has("plan_route") && !used.has("analyze_sun_exposure")) opts.push("Will I be riding into the sun, and do I need lights?");
     if (!used.has("recommend_tire_pressure")) opts.push("What tire pressure should I run?");
     if (opts.length) { const chips = el("div", "chips"); opts.slice(0, 3).forEach(t => { const b = el("button", "chip", t); b.type = "button"; b.addEventListener("click", () => send(t)); chips.appendChild(b); }); msgDiv.appendChild(chips); }
     messages.scrollTop = messages.scrollHeight;

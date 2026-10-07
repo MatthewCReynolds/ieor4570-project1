@@ -105,3 +105,10 @@ def test_physics_is_sane():
     assert 2 < climb < 3.5        # ~5-7 mph up an 8% grade
     assert head < flat            # a headwind slows you down
     assert tools._speed_for_power(150, -10, 0, 84, 0.005) == tools.MAX_DESCENT_MS
+
+
+def test_all_eight_tools_registered_in_either_import_order():
+    names = [t["function"]["name"] for t in tools.TOOLS]
+    assert len(names) == len(set(names)) == 8
+    assert {"assess_route_safety", "analyze_sun_exposure"} <= set(tools.TOOL_MAP)
+    assert set(names) == set(tools.TOOL_MAP)

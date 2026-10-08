@@ -1,27 +1,29 @@
 # Domestique
 
-IEOR 4570, Project 1: a tool-calling cycling ride-planner agent built on the class `gemini-web-tool-calling` starter (FastAPI + LiteLLM + Gemini), deployed on Cloud Run.
+**IEOR 4570, Project 1**: a tool-calling cycling ride-planner agent built on the class `gemini-web-tool-calling` starter (FastAPI + LiteLLM + Gemini), deployed on Cloud Run.
 
 **Team:** mcr2235, rw3024
 
 ## Description
 
-*Domestique* is the French term for a member of a cycling team whose role is to support the others. This chatbot agent is equipped with several tools to help with a wide range of cycling questions: planning routes, checking the weather, finding refuelling stations, and more. It is designed for both recreational and competitive cyclists, to help them enjoy their rides more.
+*Domestique* is the French term for a member of a cycling team whose role is to support the others. This chatbot agent is equipped with several tools to help with a wide range of cycling questions: planning routes, checking the weather, finding refuelling stations, and more. 
+
+It is designed for both recreational and competitive cyclists, to help them enjoy their rides more!
 
 ## Tools
 
-Tools marked **(original)** were built by our team beyond the starter.
+Tools marked **(original)** were built by our team (mcr2235, rw3024) beyond the starter.
 
-| Tool | What it does |
+| Tool | What it does... |
 |------|--------------|
 | `plan_route` | Routes two places by bike with BRouter and returns distance, climbing, max grade, paved share, an elevation profile and a GPX download. |
 | `get_ride_forecast` | Hourly temperature, rain chance, wind and daylight for a place and day, with each hour scored 0–100 for riding, plus the best window. |
-| `analyze_headwind` **(original)** | Crosses the route's bearing, mile by mile, with the wind forecast at the time you'll be there. Returns headwind cost in minutes, the worst stretch, and whether to ride the route in reverse. |
+| `analyze_headwind` **(original - mcr2235)** | Crosses the route's bearing, mile by mile, with the wind forecast at the time you'll be there. Returns headwind cost in minutes, the worst stretch, and whether to ride the route in reverse. |
 | `find_refuel_stops` | Water fountains, bike shops, cafes and restrooms within a corridor of the route, tagged with their mile marker, from OpenStreetMap. |
-| `recommend_tire_pressure` **(original)** | Front and rear psi from rider and bike weight, tire width, surface, tubeless and hookless rims, using Berto's 15% tire-drop data. |
+| `recommend_tire_pressure` **(original - mcr2235)** | Front and rear psi from rider and bike weight, tire width, surface, tubeless and hookless rims, using Berto's 15% tire-drop data. |
 | `estimate_ride_effort` | Moving time, average speed, kilojoules and a fueling plan from a physics power model on the real grade profile. |
-| `assess_route_safety` **(original)** | A Level-of-Traffic-Stress comfort score built from the road class, speed limit and bike infrastructure of every segment, with the worst stretches flagged. |
-| `analyze_sun_exposure` **(original)** | Where the sun sits relative to your heading at each point of the ride: glare stretches, lights needed, latest start to finish by sunset, and UV. |
+| `assess_route_safety` **(original - rw3024)** | A Level-of-Traffic-Stress comfort score built from the road class, speed limit and bike infrastructure of every segment, with the worst stretches flagged. |
+| `analyze_sun_exposure` **(original - rw3024)** | Where the sun sits relative to your heading at each point of the ride: glare stretches, lights needed, latest start to finish by sunset, and UV. |
 
 ## Example Queries
 

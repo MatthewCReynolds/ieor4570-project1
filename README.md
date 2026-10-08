@@ -26,7 +26,7 @@ Tools marked **(original)** were built by our team (mcr2235, rw3024) beyond the 
 | `analyze_sun_exposure` **(original - rw3024)** | Where the sun sits relative to your heading at each point of the ride: glare stretches, lights needed, latest start to finish by sunset, and UV. |
 
 ## How to Use
-Type a cycling question in plain English, such as a route, ride time, wind, safety, sun, tire pressure, or refuel stops, and include a start and end point plus a day and time if you have them. For example, paste in the following queries:
+Type a cycling question in plain English, such as a route, ride time, wind, safety, sun, tire pressure, or refuel stops, and include a start and end point plus a day and time if you have them. For example, try pasting in the following queries:
 
 ## Example Queries
 
